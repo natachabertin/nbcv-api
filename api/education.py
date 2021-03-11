@@ -8,29 +8,30 @@ router = fastapi.APIRouter()
 
 
 @router.get('/education', name='all_education')
-def get_education() -> List[Education]:
+async def get_education() -> List[Education]:
     return ['education', 'list']
 
 
-@router.post('/education', name='add_education')
-def post_education(education_submit: Education) -> Education:
+@router.post('/education', name='add_education', status_code=201, response_model=Education)
+async def create_education(education: Education) -> Education:
+    education_dict = education.dict()
 
-    return Education
+    return education_dict
 
 
-@router.get('/education/{id}', name='get_education')
-def get_education(id: int) -> Education:
+@router.get('/education/{ed_id}', name='get_education')
+async def get_education(ed_id: int) -> Education:
 
     return Education
 
 
 @router.put('/education/{id}', name='update_education')
-def update_education(id: int) -> Education:
+async def update_education(id: int) -> Education:
 
     return Education
 
 
 @router.delete('/education/{id}', name='delete_education')
-def delete_education(id: int) -> Education:
+async def delete_education(id: int) -> Education:
 
     return Education
