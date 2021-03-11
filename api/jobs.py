@@ -15,22 +15,22 @@ def get_jobs() -> List[Job]:
 @router.post('/jobs', name='add_jobs')
 def post_jobs(jobs_submit: Job) -> Job:
 
-    return Job
+    return jobs_submit
 
 
-@router.get('/jobs/id', name='get_job')
+@router.get('/jobs/{id}', name='get_job')
 def get_job(id: int) -> Job:
 
     return Job
 
 
-@router.put('/jobs/id', name='update_job')
+@router.put('/jobs/{id}', name='update_job')
 def update_job(id: int) -> Job:
 
     return Job
 
 
-@router.delete('/jobs/id', name='delete_job')
+@router.delete('/jobs/{id}', name='delete_job')
 def delete_job(id: int) -> Job:
 
     return Job
