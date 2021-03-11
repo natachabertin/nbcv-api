@@ -16,9 +16,21 @@ def get_education() -> List[Education]:
 def post_education(education_submit: Education) -> Education:
 
     return Education
-"""
-    app.add_url_rule('/education', endpoint='education')
-    app.add_url_rule('/education/create', endpoint='education.create')
-    app.add_url_rule('/education/<int:id>/update', endpoint='education.update')
-    app.add_url_rule('/education/<int:id>/delete', endpoint='education.delete')
-"""
+
+
+@router.get('/education/id', name='get_education')
+def get_education(id: int) -> Education:
+
+    return Education
+
+
+@router.put('/education/id', name='update_education')
+def update_education(id: int) -> Education:
+
+    return Education
+
+
+@router.delete('/education/id', name='delete_education')
+def delete_education(id: int) -> Education:
+
+    return Education

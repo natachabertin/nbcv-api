@@ -16,9 +16,21 @@ def get_jobs() -> List[Job]:
 def post_jobs(jobs_submit: Job) -> Job:
 
     return Job
-"""
-    app.add_url_rule('/jobs', endpoint='jobs')
-    app.add_url_rule('/jobs/create', endpoint='jobs.create')
-    app.add_url_rule('/jobs/<int:id>/update', endpoint='jobs.update')
-    app.add_url_rule('/jobs/<int:id>/delete', endpoint='jobs.delete')
-"""
+
+
+@router.get('/jobs/id', name='get_job')
+def get_job(id: int) -> Job:
+
+    return Job
+
+
+@router.put('/jobs/id', name='update_job')
+def update_job(id: int) -> Job:
+
+    return Job
+
+
+@router.delete('/jobs/id', name='delete_job')
+def delete_job(id: int) -> Job:
+
+    return Job
