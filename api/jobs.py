@@ -16,22 +16,22 @@ async def get_jobs() -> List[Job]:
 @router.post('/jobs', name='add_job', status_code=201, response_model=Job)
 async def create_job(job: Job) -> Job:
 
-    return await jobs.create(**job)
+    return await jobs.create(job)
 
 
-@router.get('/jobs/{id}', name='get_job')
-async def get_job(id: int) -> Job:
-
-    return Job
-
-
-@router.put('/jobs/{id}', name='update_job')
-async def update_job(id: int) -> Job:
+@router.get('/jobs/{job_id}', name='get_job')
+async def get_job(job_id: int) -> Job:
 
     return Job
 
 
-@router.delete('/jobs/{id}', name='delete_job')
-async def delete_job(id: int) -> Job:
+@router.put('/jobs/{job_id}', name='update_job')
+async def update_job(job_id: int) -> Job:
+
+    return Job
+
+
+@router.delete('/jobs/{job_id}', name='delete_job')
+async def delete_job(job_id: int) -> Job:
 
     return Job

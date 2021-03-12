@@ -25,13 +25,13 @@ async def get_education(ed_id: int) -> Education:
     return Education
 
 
-@router.put('/education/{id}', name='update_education')
-async def update_education(id: int) -> Education:
+@router.put('/education/{ed_id}', name='update_education')
+async def update_education(ed_id: int) -> Education:
 
     return Education
 
 
-@router.delete('/education/{id}', name='delete_education')
-async def delete_education(id: int) -> Education:
+@router.delete('/education/{ed_id}', name='delete_education')
+async def delete_education(ed_id: int) -> Education:
 
     return Education
