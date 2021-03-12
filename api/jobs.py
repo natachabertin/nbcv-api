@@ -2,8 +2,9 @@ from typing import List
 
 import fastapi
 
+from crud import jobs
 from schemas.jobs import Job
-from operations import jobs
+
 
 router = fastapi.APIRouter()
 
