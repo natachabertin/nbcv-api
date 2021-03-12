@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 
-from .database import Base
+from database import Base
 
 
 class Education(Base):
@@ -11,6 +11,6 @@ class Education(Base):
     id = Column(Integer, primary_key=True, index=True)
     school = Column(String)
     degree = Column(String)
-    start_date = Column(DateTime, default=datetime.datetime.utcnow)
-    end_date = Column(DateTime, default=datetime.datetime.utcnow)
+    start_date = Column(DateTime, default=datetime.utcnow)
+    end_date = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
