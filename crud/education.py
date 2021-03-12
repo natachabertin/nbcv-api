@@ -10,7 +10,9 @@ async def select_by_id(db: Session, ed_id: int) -> mEducation:
     return await db.query(mEducation).filter(mEducation.id == ed_id).first()
 
 
-async def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mEducation]:
+async def get_all(
+        db: Session, skip: int = 0, limit: int = 100
+        ) -> List[mEducation]:
     return db.query(mEducation).offset(skip).limit(limit).all()
 
 
@@ -27,5 +29,4 @@ async def create(db: Session, education: sEducation) -> mEducation:
 
 
 async def update(db: Session, ed_id: int, education: mEducation) -> mEducation:
-    return await select_by_id(ed_id)
-
+    return await select_by_id(db, ed_id)

@@ -6,26 +6,25 @@ from models.jobs import Job as mJob
 from schemas.jobs import Job as sJob
 
 
-async def select_by_id(db: Session, ed_id: int) -> mJob:
-    return await db.query(mJob).filter(mJob.id == ed_id).first()
+async def select_by_id(db: Session, job_id: int) -> mJob:
+    return await db.query(mJob).filter(mJob.id == job_id).first()
 
 
 async def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mJob]:
     return db.query(mJob).offset(skip).limit(limit).all()
 
 
-async def create(db: Session, jobs: sJob) -> mJob:
-    db_ed = mJob(
-        title=jobs.title,
-        company=jobs.company,
-        achievements=jobs.achievements
+async def create(db: Session, job: sJob) -> mJob:
+    db_job = mJob(
+        title=job.title,
+        company=job.company,
+        achievements=job.achievements
     )
-    db.add(db_ed)
+    db.add(db_job)
     db.commit()
-    db.refresh(db_ed)
-    return await db_ed
+    db.refresh(db_job)
+    return await db_job
 
 
-async def update(db: Session, ed_id: int, jobs: mJob) -> mJob:
-    return await select_by_id(ed_id)
-
+async def update(db: Session, job_id: int, job: mJob) -> mJob:
+    return await select_by_id(db, job_id)
