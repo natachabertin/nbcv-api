@@ -2,7 +2,9 @@ import uvicorn
 from fastapi import FastAPI
 
 from api import home, education, jobs
+from models.database import engine, Base
 
+Base.metadata.create_all(bind=engine)
 
 api = FastAPI()
 
