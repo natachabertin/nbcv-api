@@ -2,7 +2,7 @@ from typing import List
 
 import fastapi
 
-from models.education import Education
+from schemas.education import Education
 
 router = fastapi.APIRouter()
 

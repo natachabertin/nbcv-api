@@ -1,4 +1,4 @@
-from models.education import Education
+from schemas.education import Education
 
 
 async def get_all():

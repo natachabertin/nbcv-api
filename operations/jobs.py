@@ -1,4 +1,4 @@
-from models.jobs import Job
+from schemas.jobs import Job
 
 
 async def get_all():

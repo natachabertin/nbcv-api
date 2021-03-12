@@ -2,7 +2,7 @@ from typing import List
 
 import fastapi
 
-from models.jobs import Job
+from schemas.jobs import Job
 from operations import jobs
 
 router = fastapi.APIRouter()
