@@ -10,3 +10,6 @@ class Education(BaseModel):
     start_date: Optional[datetime]
     end_date: Optional[datetime]
     status: str
+
+    class Config:
+        orm_mode = True

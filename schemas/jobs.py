@@ -10,3 +10,6 @@ class Job(BaseModel):
     start_date: Optional[datetime]
     end_date: Optional[datetime]
     achievements: str
+
+    class Config:
+        orm_mode = True
