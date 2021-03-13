@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, DateTime
 
-from database import Base
+from models.database import Base
 
 
 class Job(Base):
