@@ -11,12 +11,12 @@ api = FastAPI()
 
 def configure_routing():
     api.include_router(home.router)
-    api.include_router(education.router)
-    api.include_router(jobs.router)
-    api.include_router(trainings.router)
-    api.include_router(skills.router)
-    api.include_router(projects.router)
-    api.include_router(languages.router)
+    api.include_router(education.router, tags=['Formal education'])
+    api.include_router(jobs.router, tags=['Job experience'])
+    api.include_router(trainings.router, tags=['Further trainings'])
+    api.include_router(skills.router, tags=['Skills'])
+    api.include_router(projects.router, tags=['Portfolio'])
+    api.include_router(languages.router, tags=['Languages'])
 
 
 def configure():
