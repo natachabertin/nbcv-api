@@ -17,8 +17,9 @@ def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mTraining]:
 def create(db: Session, training: sTraining) -> mTraining:
     db_training = mTraining(
         title=training.title,
-        company=training.company,
-        achievements=training.achievements
+        school=training.school,
+        end_date=training.end_date,
+        certificate=training.certificate,
     )
     db.add(db_training)
     db.commit()

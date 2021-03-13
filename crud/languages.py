@@ -16,9 +16,10 @@ def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mLanguage]:
 
 def create(db: Session, language: sLanguage) -> mLanguage:
     db_language = mLanguage(
-        title=language.title,
-        company=language.company,
-        achievements=language.achievements
+        name=language.name,
+        written_level=language.written_level,
+        spoken_level=language.spoken_level,
+        level_description=language.level_description
     )
     db.add(db_language)
     db.commit()
