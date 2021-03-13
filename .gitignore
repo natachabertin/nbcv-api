@@ -130,3 +130,5 @@ dmypy.json
 
 # database
 /nbcv.db
+/tests/integration/test.db
+/tests/integration/nbcv.db
