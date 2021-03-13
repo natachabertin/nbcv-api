@@ -1,8 +1,11 @@
 import uvicorn
 from fastapi import FastAPI
 
-from api import home, education, jobs, trainings, languages, skills, projects
+from api import (
+    home, education, jobs, trainings, languages, skills, projects, users
+)
 from models.database import engine, Base
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -11,6 +14,9 @@ api = FastAPI()
 
 def configure_routing():
     api.include_router(home.router)
+    api.include_router(
+        users.router, prefix="/users", tags=['Users']
+    )
     api.include_router(
         education.router, prefix="/education", tags=['Formal education']
     )
