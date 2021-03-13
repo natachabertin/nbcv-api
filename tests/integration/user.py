@@ -14,7 +14,7 @@ def test_create_user():
     data = response.json()
     assert data["email"] == "deadpool@example.com"
     assert "id" not in data
-    user_id = 0
+    user_id = 1
 
     response = client.get(f"/users/{user_id}")
     assert response.status_code == 200, response.text
