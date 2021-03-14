@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id
+from crud.base import select_item_by_id, list_items
 from models.projects import Project as mProject
 from schemas.projects import Project as sProject
 
@@ -12,7 +12,7 @@ def select_by_id(db: Session, project_id: int) -> mProject:
 
 
 def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mProject]:
-    return db.query(mProject).offset(skip).limit(limit).all()
+    return list_items(db, mProject, skip, limit)
 
 
 def create(db: Session, project: sProject) -> mProject:

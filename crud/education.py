@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id
+from crud.base import select_item_by_id, list_items
 from models.education import Education as mEducation
 from schemas.education import Education as sEducation
 
@@ -14,7 +14,7 @@ def select_by_id(db: Session, ed_id: int) -> mEducation:
 def get_all(
         db: Session, skip: int = 0, limit: int = 100
         ) -> List[mEducation]:
-    return db.query(mEducation).offset(skip).limit(limit).all()
+    return list_items(db, mEducation, skip, limit)
 
 
 def create(db: Session, education: sEducation) -> mEducation:

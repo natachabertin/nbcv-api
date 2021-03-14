@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id
+from crud.base import select_item_by_id, list_items
 from models.trainings import Training as mTraining
 from schemas.trainings import Training as sTraining
 
@@ -12,7 +12,7 @@ def select_by_id(db: Session, training_id: int) -> mTraining:
 
 
 def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mTraining]:
-    return db.query(mTraining).offset(skip).limit(limit).all()
+    return list_items(db, mTraining, skip, limit)
 
 
 def create(db: Session, training: sTraining) -> mTraining:
