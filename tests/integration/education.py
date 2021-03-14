@@ -24,18 +24,18 @@ def test_get_list():
 
 
 def test_get_by_id():
-    user_id = 1
-    response = client.get(f"/education/{user_id}")
+    education_id = 1
+    response = client.get(f"/education/{education_id}")
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["id"] == user_id
+    assert data["id"] == education_id
 
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    user_id = 1
+    education_id = 1
     response = client.put(
-        "/education/{user_id}",
+        "/education/{education_id}",
         json={
             "school": "Another school"
         },
@@ -46,11 +46,11 @@ def test_update():
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
-    user_id = 1
-    response = client.delete("/education/{user_id}")
+    education_id = 1
+    response = client.delete("/education/{education_id}")
 
     assert response.status_code == 200, response.text
     data = response.json()
 
-    response = client.get(f"/education/{user_id}")
+    response = client.get(f"/education/{education_id}")
     assert response.status_code == 404, None
