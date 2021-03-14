@@ -22,3 +22,14 @@ def create_item(db: Session, entity_schema: Schema, entity_model: Model) -> Mode
     db.commit()
     db.refresh(db_entity)
     return db_entity
+
+
+def update_item(
+        db: Session, entity_schema: Schema, entity_model: Model, entity_id: int
+        ) -> Model:
+    updated_item = select_item_by_id(db, entity_model, entity_id)
+    update_data = entity_schema.dict(exclude_unset=True)
+    updated_item = entity_model(**update_data)
+    db.flush()
+    db.commit()
+    return updated_item

@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items, create_item
+from crud.base import select_item_by_id, list_items, create_item, update_item
 from models.education import Education as mEducation
 from schemas.education import Education as sEducation
 
@@ -21,5 +21,9 @@ def create(db: Session, education: sEducation) -> mEducation:
     return create_item(db, education, mEducation)
 
 
-def update(db: Session, ed_id: int, education: mEducation) -> mEducation:
-    return select_by_id(db, ed_id)
+def update(db: Session, ed_id: int, education: sEducation) -> mEducation:
+    return update_item(db, education, mEducation, ed_id)
+
+
+def delete(db: Session, ed_id: int, education: mEducation) -> mEducation:
+    return update_item(db, sEducation, education, ed_id)

@@ -35,15 +35,14 @@ def get_education(
     return db_education
 
 
-@router.put('/{ed_id}', name='update_education')
+@router.patch('/{ed_id}', name='update_education')
 def update_education(
-        ed_id: int, db: Session = Depends(get_db)
+        ed_id: int, education: Education, db: Session = Depends(get_db)
         ) -> Education:
-    return Education
-
+    return crud.update(db=db, ed_id=ed_id, education=education)
 
 @router.delete('/{ed_id}', name='delete_education')
 def delete_education(
-        ed_id: int, db: Session = Depends(get_db)
+        ed_id: int, education: Education, db: Session = Depends(get_db)
         ) -> Education:
-    return Education
+    return crud.delete(db=db, education=education, ed_id=ed_id)

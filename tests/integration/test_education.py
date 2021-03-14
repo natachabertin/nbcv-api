@@ -31,10 +31,9 @@ def test_get_by_id():
     assert data["id"] == education_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
     education_id = 1
-    response = client.put(
+    response = client.patch(
         "/education/{education_id}",
         json={
             "school": "Another school"
