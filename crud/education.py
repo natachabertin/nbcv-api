@@ -2,16 +2,13 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-
+from crud.base import select_item_by_id
 from models.education import Education as mEducation
 from schemas.education import Education as sEducation
-
-from crud.base import select_item_by_id
 
 
 def select_by_id(db: Session, ed_id: int) -> mEducation:
     return select_item_by_id(db, mEducation, ed_id)
-    # return db.query(mEducation).filter(mEducation.id == ed_id).first()
 
 
 def get_all(

@@ -2,12 +2,13 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
+from crud.base import select_item_by_id
 from models.skills import Skill as mSkill
 from schemas.skills import Skill as sSkill
 
 
 def select_by_id(db: Session, skill_id: int) -> mSkill:
-    return db.query(mSkill).filter(mSkill.id == skill_id).first()
+    return select_item_by_id(db, mSkill, skill_id)
 
 
 def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mSkill]:
