@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 
 from tests.utils import client
@@ -39,7 +37,7 @@ def test_get_by_id():
 def test_update():
     training_id = 1
     response = client.put(
-        "/trainings/{training_id}",
+        f"/trainings/{training_id}",
         json={
             "school": "another school"
         },
@@ -48,13 +46,13 @@ def test_update():
     data = response.json()
     assert data["school"] == "another school"
 
+
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
     training_id = 1
-    response = client.delete("/trainings/{training_id}")
 
+    response = client.delete(f"/trainings/{training_id}")
     assert response.status_code == 200, response.text
-    data = response.json()
 
     response = client.get(f"/trainings/{training_id}")
     assert response.status_code == 404, None
