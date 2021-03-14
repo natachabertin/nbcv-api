@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items
+from crud.base import select_item_by_id, list_items, create_item
 from models.users import User as mUser
 from schemas.users import User as sUser
 
@@ -16,15 +16,7 @@ def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mUser]:
 
 
 def create(db: Session, user: sUser) -> mUser:
-    db_user = mUser(
-        username=user.username,
-        email=user.email,
-        password=user.password
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    return create_item(db, user, mUser)
 
 
 def update(db: Session, user_id: int, user: mUser) -> mUser:

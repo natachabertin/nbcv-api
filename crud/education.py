@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items
+from crud.base import select_item_by_id, list_items, create_item
 from models.education import Education as mEducation
 from schemas.education import Education as sEducation
 
@@ -18,15 +18,7 @@ def get_all(
 
 
 def create(db: Session, education: sEducation) -> mEducation:
-    db_ed = mEducation(
-        school=education.school,
-        degree=education.degree,
-        status=education.status
-    )
-    db.add(db_ed)
-    db.commit()
-    db.refresh(db_ed)
-    return db_ed
+    return create_item(db, education, mEducation)
 
 
 def update(db: Session, ed_id: int, education: mEducation) -> mEducation:

@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items
+from crud.base import select_item_by_id, list_items, create_item
 from models.projects import Project as mProject
 from schemas.projects import Project as sProject
 
@@ -16,16 +16,7 @@ def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mProject]:
 
 
 def create(db: Session, project: sProject) -> mProject:
-    db_project = mProject(
-        name=project.name,
-        description=project.description,
-        start_date=project.start_date,
-        end_date=project.end_date
-    )
-    db.add(db_project)
-    db.commit()
-    db.refresh(db_project)
-    return db_project
+    return create_item(db, project, mProject)
 
 
 def update(db: Session, project_id: int, project: mProject) -> mProject:
