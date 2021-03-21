@@ -31,18 +31,21 @@ def test_get_by_id():
     assert data["id"] == user_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
     user_id = 1
     response = client.put(
-        "/users/{user_id}",
+        f"/users/{user_id}",
         json={
-            "email": "another@ema.il"
+            "username": "otherjdoe",
+            "email": "otherjdoe@example.com",
+            "password": "otherjdoepwd"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["email"] == "another@ema.il"
+    assert data["username"] == "otherjdoe"
+    assert data["email"] == "otherjdoe@example.com"
+    assert data["password"] == "otherjdoepwd"
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():

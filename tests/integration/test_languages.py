@@ -33,18 +33,23 @@ def test_get_by_id():
     assert data["id"] == language_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
     language_id = 1
     response = client.put(
-        "/languages/{language_id}",
+        f"/languages/{language_id}",
         json={
-            "level_description": "Advanced"
+            "name": "Another French",
+            "level_description": "Another Intermediate",
+            "written_level": 7,
+            "spoken_level": 4
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["level_description"] == "Advanced"
+    assert data["name"] == "Another French"
+    assert data["level_description"] == "Another Intermediate"
+    assert data["written_level"] == 7
+    assert data["spoken_level"] == 4
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():

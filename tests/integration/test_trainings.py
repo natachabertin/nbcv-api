@@ -33,18 +33,21 @@ def test_get_by_id():
     assert data["id"] == training_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
     training_id = 1
     response = client.put(
         f"/trainings/{training_id}",
         json={
-            "school": "another school"
+            "title": "title",
+            "school": "other school",
+            "end_date": "2021-10-14T15:36:29.896Z"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["school"] == "another school"
+    assert data["title"] == "title"
+    assert data["school"] == "other school"
+    assert data["end_date"] == "2021-10-14T15:36:29.896Z"
 
 
 @pytest.mark.skip(reason="Not implemented yet.")

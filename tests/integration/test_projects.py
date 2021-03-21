@@ -29,18 +29,19 @@ def test_get_by_id():
     assert data["id"] == project_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
     project_id = 1
     response = client.put(
-        "/projects/{project_id}",
+        f"/projects/{project_id}",
         json={
-            "description": "another project description"
+            "name": "Another Project",
+            "description": "Another Project example"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["description"] == "another project description"
+    assert data["name"] == "Another Project"
+    assert data["description"] == "Another Project example"
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():

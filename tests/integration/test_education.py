@@ -47,6 +47,7 @@ def test_update():
     assert data["school"] == "Another school"
     assert data["status"] == "Another status"
 
+
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
     education_id = 1

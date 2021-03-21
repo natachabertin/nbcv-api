@@ -31,13 +31,14 @@ def test_get_by_id():
     assert data["id"] == skill_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
     skill_id = 1
     response = client.put(
-        "/skills/{skill_id}",
+        f"/skills/{skill_id}",
         json={
-            "level": "another@ema.il"
+            "name": "python",
+            "level": 9,
+            "category": "back-end"
         },
     )
     assert response.status_code == 200, response.text

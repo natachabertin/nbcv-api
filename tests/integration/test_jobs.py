@@ -1,6 +1,7 @@
 from tests.utils import client
 import pytest
 
+
 def test_create():
     response = client.post(
         "/jobs/",
@@ -24,33 +25,37 @@ def test_get_list():
 
 
 def test_get_by_id():
-    user_id = 1
-    response = client.get(f"/jobs/{user_id}")
+    job_id = 1
+    response = client.get(f"/jobs/{job_id}")
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["id"] == user_id
+    assert data["id"] == job_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    user_id = 1
+    job_id = 1
     response = client.put(
-        "/jobs/{user_id}",
+        f"/jobs/{job_id}",
         json={
-            "email": "another@ema.il"
+            "title": "Another title",
+            "company": "Another company",
+            "achievements": "Another achievements"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["email"] == "another@ema.il"
+    assert data["title"] == "Another title"
+    assert data["company"] == "Another company"
+    assert data["achievements"] == "Another achievements"
+
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
-    user_id = 1
-    response = client.delete("/jobs/{user_id}")
+    job_id = 1
+    response = client.delete("/jobs/{job_id}")
 
     assert response.status_code == 200, response.text
     data = response.json()
 
-    response = client.get(f"/jobs/{user_id}")
+    response = client.get(f"/jobs/{job_id}")
     assert response.status_code == 404, None
