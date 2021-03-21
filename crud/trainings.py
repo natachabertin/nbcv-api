@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items, create_item
+from crud.base import select_item_by_id, list_items, create_item, update_item
 from models.trainings import Training as mTraining
 from schemas.trainings import Training as sTraining
 
@@ -19,5 +19,11 @@ def create(db: Session, training: sTraining) -> mTraining:
     return create_item(db, training, mTraining)
 
 
-def update(db: Session, training_id: int, training: mTraining) -> mTraining:
-    return select_by_id(db, training_id)
+def update(
+        db: Session, training_id: int, training_submit: sTraining
+        ) -> mTraining:
+    return update_item(db, training_submit, mTraining, training_id)
+
+
+def delete(db: Session, training_id: int, training: mTraining) -> mTraining:
+    return update_item(db, sTraining, training, training_id)

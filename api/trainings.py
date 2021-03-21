@@ -31,11 +31,11 @@ def get_training(training_id: int, db: Session = Depends(get_db)) -> Training:
     return db_training
 
 
-@router.put('/{training_id}', name='update_training')
-def update_training(training_id: int, db: Session = Depends(get_db)) -> Training:
-    return Training
+@router.patch('/{training_id}', name='update_training')
+def update_training(training_id: int, training: Training, db: Session = Depends(get_db)) -> Training:
+    return crud.update(db=db, training_id=training_id, training_submit=training)
 
 
 @router.delete('/{training_id}', name='delete_training')
 def delete_training(training_id: int, db: Session = Depends(get_db)) -> Training:
-    return Training
+    return crud.update(db=db, training_id=training_id)

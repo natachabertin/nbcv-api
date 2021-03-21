@@ -35,7 +35,7 @@ def test_get_by_id():
 
 def test_update():
     training_id = 1
-    response = client.put(
+    response = client.patch(
         f"/trainings/{training_id}",
         json={
             "title": "title",
@@ -47,7 +47,7 @@ def test_update():
     data = response.json()
     assert data["title"] == "title"
     assert data["school"] == "other school"
-    assert data["end_date"] == "2021-10-14T15:36:29.896Z"
+    assert data["end_date"] == "2021-10-14T15:36:29.896000"
 
 
 @pytest.mark.skip(reason="Not implemented yet.")
