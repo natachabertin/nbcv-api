@@ -31,9 +31,9 @@ def get_job(job_id: int, db: Session = Depends(get_db)) -> Job:
     return db_job
 
 
-@router.put('/{job_id}', name='update_job')
-def update_job(job_id: int, db: Session = Depends(get_db)) -> Job:
-    return Job
+@router.patch('/{job_id}', name='update_job')
+def update_job(job_id: int, job: Job, db: Session = Depends(get_db)) -> Job:
+    return crud.update(db=db, job_id=job_id, job_submit=job)
 
 
 @router.delete('/{job_id}', name='delete_job')

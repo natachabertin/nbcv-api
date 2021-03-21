@@ -34,7 +34,7 @@ def test_get_by_id():
 
 def test_update():
     job_id = 1
-    response = client.put(
+    response = client.patch(
         f"/jobs/{job_id}",
         json={
             "title": "Another title",
