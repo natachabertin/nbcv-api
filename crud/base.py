@@ -16,7 +16,9 @@ def list_items(
     return db.query(entity).offset(skip).limit(limit).all()
 
 
-def create_item(db: Session, entity_schema: Schema, entity_model: Model) -> Model:
+def create_item(
+        db: Session, entity_schema: Schema, entity_model: Model
+        ) -> Model:
     db_entity = entity_model(**entity_schema.dict())
     db.add(db_entity)
     db.commit()
@@ -25,11 +27,15 @@ def create_item(db: Session, entity_schema: Schema, entity_model: Model) -> Mode
 
 
 def update_item(
-        db: Session, entity_schema: Schema, entity_model: Model, entity_id: int
+        db: Session, entity_schema: Schema, entity_model: Model, item_id: int
         ) -> Model:
-    updated_item = select_item_by_id(db, entity_model, entity_id)
+    stored_item = select_item_by_id(db, entity_model, item_id)
     update_data = entity_schema.dict(exclude_unset=True)
-    updated_item = entity_model(**update_data)
-    db.flush()
+
+    for key, value in update_data.items():
+        setattr(stored_item, key, value)
+
+    db.add(stored_item)
     db.commit()
-    return updated_item
+    db.refresh(stored_item)
+    return stored_item
