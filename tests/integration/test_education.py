@@ -34,19 +34,23 @@ def test_get_by_id():
 def test_update():
     education_id = 1
     response = client.patch(
-        "/education/{education_id}",
+        f"/education/{education_id}",
         json={
-            "school": "Another school"
+            "school": "Another school",
+            "degree": "Another degree",
+            "status": "Another status"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
+    assert data["degree"] == "Another degree"
     assert data["school"] == "Another school"
+    assert data["status"] == "Another status"
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
     education_id = 1
-    response = client.delete("/education/{education_id}")
+    response = client.delete(f"/education/{education_id}")
 
     assert response.status_code == 200, response.text
     data = response.json()
