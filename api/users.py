@@ -31,11 +31,11 @@ def get_user(user_id: int, db: Session = Depends(get_db)) -> User:
     return db_user
 
 
-@router.put('/{user_id}', name='update_user')
-def update_user(user_id: int, db: Session = Depends(get_db)) -> User:
-    return User
+@router.patch('/{user_id}', name='update_user')
+def update_user(user_id: int, user: User, db: Session = Depends(get_db)) -> User:
+    return crud.update(db=db, user_id=user_id, user_submit=user)
 
 
 @router.delete('/{user_id}', name='delete_user')
 def delete_user(user_id: int, db: Session = Depends(get_db)) -> User:
-    return User
+    return crud.update(db=db, user_id=user_id)

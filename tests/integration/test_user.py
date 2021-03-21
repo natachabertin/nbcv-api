@@ -33,7 +33,7 @@ def test_get_by_id():
 
 def test_update():
     user_id = 1
-    response = client.put(
+    response = client.patch(
         f"/users/{user_id}",
         json={
             "username": "otherjdoe",
