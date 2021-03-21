@@ -39,7 +39,7 @@ def get_education(
 def update_education(
         ed_id: int, education: Education, db: Session = Depends(get_db)
         ) -> Education:
-    return crud.update(db=db, ed_id=ed_id, education=education)
+    return crud.update(db=db, ed_id=ed_id, education_submit=education)
 
 @router.delete('/{ed_id}', name='delete_education')
 def delete_education(
