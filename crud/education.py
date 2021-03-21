@@ -21,8 +21,10 @@ def create(db: Session, education: sEducation) -> mEducation:
     return create_item(db, education, mEducation)
 
 
-def update(db: Session, ed_id: int, education: sEducation) -> mEducation:
-    return update_item(db, education, mEducation, ed_id)
+def update(
+        db: Session, ed_id: int, education_submit: sEducation
+        ) -> mEducation:
+    return update_item(db, education_submit, mEducation, ed_id)
 
 
 def delete(db: Session, ed_id: int, education: mEducation) -> mEducation:
