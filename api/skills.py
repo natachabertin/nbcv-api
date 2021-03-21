@@ -31,11 +31,11 @@ def get_skill(skill_id: int, db: Session = Depends(get_db)) -> Skill:
     return db_skill
 
 
-@router.put('/{skill_id}', name='update_skill')
-def update_skill(skill_id: int, db: Session = Depends(get_db)) -> Skill:
-    return Skill
+@router.patch('/{skill_id}', name='update_skill')
+def update_skill(skill_id: int, skill: Skill, db: Session = Depends(get_db)) -> Skill:
+    return crud.update(db=db, skill_id=skill_id, skill_submit=skill)
 
 
 @router.delete('/{skill_id}', name='delete_skill')
 def delete_skill(skill_id: int, db: Session = Depends(get_db)) -> Skill:
-    return Skill
+    return crud.update(db=db, skill_id=skill_id)

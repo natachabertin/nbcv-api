@@ -33,17 +33,19 @@ def test_get_by_id():
 
 def test_update():
     skill_id = 1
-    response = client.put(
+    response = client.patch(
         f"/skills/{skill_id}",
         json={
-            "name": "python",
-            "level": 9,
-            "category": "back-end"
+            "name": "react",
+            "level": 4,
+            "category": "front-end"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["level"] == "another@ema.il"
+    assert data["name"] == "react"
+    assert data["level"] == 4
+    assert data["category"] == "front-end"
 
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
