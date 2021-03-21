@@ -31,7 +31,7 @@ def test_get_by_id():
 
 def test_update():
     project_id = 1
-    response = client.put(
+    response = client.patch(
         f"/projects/{project_id}",
         json={
             "name": "Another Project",

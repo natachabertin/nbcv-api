@@ -31,11 +31,11 @@ def get_project(project_id: int, db: Session = Depends(get_db)) -> Project:
     return db_project
 
 
-@router.put('/{project_id}', name='update_project')
-def update_project(project_id: int, db: Session = Depends(get_db)) -> Project:
-    return Project
+@router.patch('/{project_id}', name='update_project')
+def update_project(project_id: int, project: Project, db: Session = Depends(get_db)) -> Project:
+    return crud.update(db=db, project_id=project_id, project_submit=project)
 
 
 @router.delete('/{project_id}', name='delete_project')
 def delete_project(project_id: int, db: Session = Depends(get_db)) -> Project:
-    return Project
+    return crud.delete(db=db, project_id=project_id)
