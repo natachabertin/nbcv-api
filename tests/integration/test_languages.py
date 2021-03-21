@@ -1,6 +1,7 @@
 from tests.utils import client
 import pytest
 
+
 def test_create():
     response = client.post(
         "/languages/",
@@ -35,7 +36,7 @@ def test_get_by_id():
 
 def test_update():
     language_id = 1
-    response = client.put(
+    response = client.patch(
         f"/languages/{language_id}",
         json={
             "name": "Another French",
@@ -51,13 +52,14 @@ def test_update():
     assert data["written_level"] == 7
     assert data["spoken_level"] == 4
 
+
 @pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
     language_id = 1
     response = client.delete("/languages/{language_id}")
 
     assert response.status_code == 200, response.text
-    data = response.json()
+    # data = response.json()
 
     response = client.get(f"/languages/{language_id}")
     assert response.status_code == 404, None

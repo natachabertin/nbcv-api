@@ -31,11 +31,13 @@ def get_language(language_id: int, db: Session = Depends(get_db)) -> Language:
     return db_language
 
 
-@router.put('/{language_id}', name='update_language')
-def update_language(language_id: int, db: Session = Depends(get_db)) -> Language:
-    return Language
+@router.patch('/{language_id}', name='update_language')
+def update_language(language_id: int, language: Language, db: Session = Depends(get_db)) -> Language:
+    return crud.update(
+        db=db, language_submit=language, language_id=language_id
+    )
 
 
 @router.delete('/{language_id}', name='delete_language')
 def delete_language(language_id: int, db: Session = Depends(get_db)) -> Language:
-    return Language
+    return crud.delete(db=db, ed_id=language_id)
