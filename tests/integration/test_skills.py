@@ -1,5 +1,5 @@
 from tests.db_utils import client
-import pytest
+from tests.utils import get_the_first_id
 
 def test_create():
     response = client.post(
@@ -24,7 +24,7 @@ def test_get_list():
 
 
 def test_get_by_id():
-    skill_id = 1
+    skill_id = get_the_first_id('skills', client)
     response = client.get(f"/skills/{skill_id}")
     assert response.status_code == 200, response.text
     data = response.json()
@@ -32,7 +32,7 @@ def test_get_by_id():
 
 
 def test_update():
-    skill_id = 1
+    skill_id = get_the_first_id('skills', client)
     response = client.patch(
         f"/skills/{skill_id}",
         json={
@@ -49,9 +49,6 @@ def test_update():
 
 
 def test_delete():
-    skill_id = 1
-    response = client.delete("/skills/{skill_id}")
-    assert response.status_code == 200, response.text
-
-    response = client.get(f"/skills/{skill_id}")
-    assert response.status_code == 404, None
+    skill_id = get_the_first_id('skills', client)
+    response = client.delete(f"/skills/{skill_id}")
+    assert response.status_code == 204, response.text
