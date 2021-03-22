@@ -11,11 +11,9 @@ API that allows you to publish your resume.
 * skills
 * portfolio
 
-#### Pending
-The app is in an MVP stage.
-* test
-* update and delete for all entities
+#### In progress
 * error management
+* No 'happy path' use cases
 
 #### Planned features
 * auth
@@ -25,6 +23,8 @@ The app is in an MVP stage.
   * links
   * logos
 * containerization
+* queues
+* front-end consumer
 
 ## How to try it
 Once cloned, execute in your CLI:
