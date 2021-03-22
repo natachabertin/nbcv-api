@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import skills as crud
@@ -12,7 +12,7 @@ from schemas.skills import Skill
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_skills', response_model=List[Skill])
+@router.get('/', name='all_skills')
 def get_skills(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Skill]:
@@ -36,6 +36,6 @@ def update_skill(skill_id: int, skill: Skill, db: Session = Depends(get_db)) -> 
     return crud.update(db=db, skill_id=skill_id, skill_submit=skill)
 
 
-@router.delete('/{skill_id}', name='delete_skill')
+@router.delete('/{skill_id}', name='delete_skill', status_code=204, response_class=Response)
 def delete_skill(skill_id: int, db: Session = Depends(get_db)) -> Skill:
-    return crud.update(db=db, skill_id=skill_id)
+    return crud.delete(db=db, skill_id=skill_id)

@@ -2,7 +2,8 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items, create_item, update_item
+from crud.base import select_item_by_id, list_items, create_item, update_item, \
+    delete_item
 from models.skills import Skill as mSkill
 from schemas.skills import Skill as sSkill
 
@@ -25,5 +26,5 @@ def update(
     return update_item(db, skill_submit, mSkill, skill_id)
 
 
-def delete(db: Session, skill_id: int, skill: mSkill) -> mSkill:
-    return update_item(db, sSkill, skill, skill_id)
+def delete(db: Session, skill_id: int):
+    return delete_item(db, mSkill, skill_id)
