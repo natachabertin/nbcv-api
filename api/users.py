@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import users as crud
@@ -12,7 +12,7 @@ from schemas.users import User
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_users', response_model=List[User])
+@router.get('/', name='all_users')
 def get_users(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[User]:
@@ -36,6 +36,6 @@ def update_user(user_id: int, user: User, db: Session = Depends(get_db)) -> User
     return crud.update(db=db, user_id=user_id, user_submit=user)
 
 
-@router.delete('/{user_id}', name='delete_user')
+@router.delete('/{user_id}', name='delete_user', status_code=204, response_class=Response)
 def delete_user(user_id: int, db: Session = Depends(get_db)) -> User:
-    return crud.update(db=db, user_id=user_id)
+    return crud.delete(db=db, user_id=user_id)
