@@ -1,5 +1,8 @@
-from tests.utils import client
+from tests.db_utils import client
 import pytest
+
+from tests.utils import get_the_first_id
+
 
 def test_create():
     response = client.post(
@@ -24,7 +27,7 @@ def test_get_list():
 
 
 def test_get_by_id():
-    education_id = 1
+    education_id = get_the_first_id('education', client)
     response = client.get(f"/education/{education_id}")
     assert response.status_code == 200, response.text
     data = response.json()
@@ -32,7 +35,7 @@ def test_get_by_id():
 
 
 def test_update():
-    education_id = 1
+    education_id = get_the_first_id('education', client)
     response = client.patch(
         f"/education/{education_id}",
         json={
@@ -48,13 +51,7 @@ def test_update():
     assert data["status"] == "Another status"
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
-    education_id = 1
+    education_id = get_the_first_id('education', client)
     response = client.delete(f"/education/{education_id}")
-
-    assert response.status_code == 200, response.text
-    data = response.json()
-
-    response = client.get(f"/education/{education_id}")
-    assert response.status_code == 404, None
+    assert response.status_code == 204, response.text

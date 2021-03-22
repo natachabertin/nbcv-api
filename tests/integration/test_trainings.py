@@ -1,6 +1,6 @@
 import pytest
 
-from tests.utils import client
+from tests.db_utils import client
 
 
 def test_create():
@@ -50,10 +50,8 @@ def test_update():
     assert data["end_date"] == "2021-10-14T15:36:29.896000"
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
     training_id = 1
-
     response = client.delete(f"/trainings/{training_id}")
     assert response.status_code == 200, response.text
 

@@ -1,4 +1,4 @@
-from tests.utils import client
+from tests.db_utils import client
 import pytest
 
 def test_create():
@@ -43,13 +43,11 @@ def test_update():
     assert data["name"] == "Another Project"
     assert data["description"] == "Another Project example"
 
-@pytest.mark.skip(reason="Not implemented yet.")
+
 def test_delete():
     project_id = 1
     response = client.delete("/projects/{project_id}")
-
     assert response.status_code == 200, response.text
-    data = response.json()
 
     response = client.get(f"/projects/{project_id}")
     assert response.status_code == 404, None
