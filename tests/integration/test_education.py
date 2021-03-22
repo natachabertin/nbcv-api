@@ -1,6 +1,4 @@
 from tests.db_utils import client
-import pytest
-
 from tests.utils import get_the_first_id
 
 
