@@ -13,7 +13,7 @@ router = fastapi.APIRouter()
 
 
 @router.get('/', name='all_education')
-def get_education(
+def get_educations(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Education]:
     return crud.get_all(db, skip=skip, limit=limit)
