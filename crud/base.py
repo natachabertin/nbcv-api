@@ -39,3 +39,10 @@ def update_item(
     db.commit()
     db.refresh(stored_item)
     return stored_item
+
+
+def delete_item(db: Session, entity_model: Model, item_id: int):
+    stored_item = select_item_by_id(db, entity_model, item_id)
+
+    db.delete(stored_item)
+    db.commit()

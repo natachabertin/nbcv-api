@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import education as crud
@@ -35,15 +35,13 @@ def get_education(
     return db_education
 
 
-@router.patch('/{ed_id}', name='update_education')
+@router.patch('/{ed_id}', name='update_education', response_model=Education)
 def update_education(
         ed_id: int, education: Education, db: Session = Depends(get_db)
         ) -> Education:
     return crud.update(db=db, ed_id=ed_id, education_submit=education)
 
 
-@router.delete('/{ed_id}', name='delete_education')
-def delete_education(
-        ed_id: int, education: Education, db: Session = Depends(get_db)
-        ) -> Education:
-    return crud.delete(db=db, education=education, ed_id=ed_id)
+@router.delete('/{ed_id}', name='delete_education', status_code=204, response_class=Response)
+def delete_education(ed_id: int, db: Session = Depends(get_db)) -> Education:
+    return crud.delete(db=db, ed_id=ed_id)
