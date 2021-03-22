@@ -1,5 +1,5 @@
-from tests.utils import client
-import pytest
+from tests.db_utils import client
+from tests.utils import get_the_first_id
 
 def test_create():
     response = client.post(
@@ -22,33 +22,29 @@ def test_get_list():
 
 
 def test_get_by_id():
-    project_id = 1
+    project_id = get_the_first_id('projects', client)
     response = client.get(f"/projects/{project_id}")
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["id"] == project_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    project_id = 1
-    response = client.put(
-        "/projects/{project_id}",
+    project_id = get_the_first_id('projects', client)
+    response = client.patch(
+        f"/projects/{project_id}",
         json={
-            "description": "another project description"
+            "name": "Another Project",
+            "description": "Another Project example"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["description"] == "another project description"
+    assert data["name"] == "Another Project"
+    assert data["description"] == "Another Project example"
 
-@pytest.mark.skip(reason="Not implemented yet.")
+
 def test_delete():
-    project_id = 1
-    response = client.delete("/projects/{project_id}")
-
-    assert response.status_code == 200, response.text
-    data = response.json()
-
-    response = client.get(f"/projects/{project_id}")
-    assert response.status_code == 404, None
+    project_id = get_the_first_id('projects', client)
+    response = client.delete(f"/projects/{project_id}")
+    assert response.status_code == 204, response.text

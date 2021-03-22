@@ -2,30 +2,29 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
+from crud.base import select_item_by_id, list_items, create_item, update_item, \
+    delete_item
 from models.trainings import Training as mTraining
 from schemas.trainings import Training as sTraining
 
 
 def select_by_id(db: Session, training_id: int) -> mTraining:
-    return db.query(mTraining).filter(mTraining.id == training_id).first()
+    return select_item_by_id(db, mTraining, training_id)
 
 
 def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mTraining]:
-    return db.query(mTraining).offset(skip).limit(limit).all()
+    return list_items(db, mTraining, skip, limit)
 
 
 def create(db: Session, training: sTraining) -> mTraining:
-    db_training = mTraining(
-        title=training.title,
-        school=training.school,
-        end_date=training.end_date,
-        certificate=training.certificate,
-    )
-    db.add(db_training)
-    db.commit()
-    db.refresh(db_training)
-    return db_training
+    return create_item(db, training, mTraining)
 
 
-def update(db: Session, training_id: int, training: mTraining) -> mTraining:
-    return select_by_id(db, training_id)
+def update(
+        db: Session, training_id: int, training_submit: sTraining
+        ) -> mTraining:
+    return update_item(db, training_submit, mTraining, training_id)
+
+
+def delete(db: Session, training_id: int):
+    return delete_item(db, mTraining, training_id)

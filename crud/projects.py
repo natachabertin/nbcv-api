@@ -2,30 +2,29 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
+from crud.base import select_item_by_id, list_items, create_item, update_item, \
+    delete_item
 from models.projects import Project as mProject
 from schemas.projects import Project as sProject
 
 
 def select_by_id(db: Session, project_id: int) -> mProject:
-    return db.query(mProject).filter(mProject.id == project_id).first()
+    return select_item_by_id(db, mProject, project_id)
 
 
 def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[mProject]:
-    return db.query(mProject).offset(skip).limit(limit).all()
+    return list_items(db, mProject, skip, limit)
 
 
 def create(db: Session, project: sProject) -> mProject:
-    db_project = mProject(
-        name=project.name,
-        description=project.description,
-        start_date=project.start_date,
-        end_date=project.end_date
-    )
-    db.add(db_project)
-    db.commit()
-    db.refresh(db_project)
-    return db_project
+    return create_item(db, project, mProject)
 
 
-def update(db: Session, project_id: int, project: mProject) -> mProject:
-    return select_by_id(db, project_id)
+def update(
+        db: Session, project_id: int, project_submit: sProject
+        ) -> mProject:
+    return update_item(db, project_submit, mProject, project_id)
+
+
+def delete(db: Session, project_id: int):
+    return delete_item(db, mProject, project_id)

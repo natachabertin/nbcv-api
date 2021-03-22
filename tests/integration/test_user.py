@@ -1,5 +1,5 @@
-from tests.utils import client
-import pytest
+from tests.db_utils import client
+from tests.utils import get_the_first_id
 
 def test_create():
     response = client.post(
@@ -24,33 +24,31 @@ def test_get_list():
 
 
 def test_get_by_id():
-    user_id = 1
+    user_id = get_the_first_id('users', client)
     response = client.get(f"/users/{user_id}")
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["id"] == user_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    user_id = 1
-    response = client.put(
-        "/users/{user_id}",
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}",
         json={
-            "email": "another@ema.il"
+            "username": "otherjdoe",
+            "email": "otherjdoe@example.com",
+            "password": "otherjdoepwd"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["email"] == "another@ema.il"
+    assert data["username"] == "otherjdoe"
+    assert data["email"] == "otherjdoe@example.com"
+    assert data["password"] == "otherjdoepwd"
 
-@pytest.mark.skip(reason="Not implemented yet.")
+
 def test_delete():
-    user_id = 1
-    response = client.delete("/users/{user_id}")
-
-    assert response.status_code == 200, response.text
-    data = response.json()
-
-    response = client.get(f"/users/{user_id}")
-    assert response.status_code == 404, None
+    user_id = get_the_first_id('users', client)
+    response = client.delete(f"/users/{user_id}")
+    assert response.status_code == 204, response.text

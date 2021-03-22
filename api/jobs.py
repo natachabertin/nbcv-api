@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import jobs as crud
@@ -12,7 +12,7 @@ from schemas.jobs import Job
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_jobs', response_model=List[Job])
+@router.get('/', name='all_jobs')
 def get_jobs(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Job]:
@@ -31,11 +31,11 @@ def get_job(job_id: int, db: Session = Depends(get_db)) -> Job:
     return db_job
 
 
-@router.put('/{job_id}', name='update_job')
-def update_job(job_id: int, db: Session = Depends(get_db)) -> Job:
-    return Job
+@router.patch('/{job_id}', name='update_job')
+def update_job(job_id: int, job: Job, db: Session = Depends(get_db)) -> Job:
+    return crud.update(db=db, job_id=job_id, job_submit=job)
 
 
-@router.delete('/{job_id}', name='delete_job')
-def delete_job(job_id: int, db: Session = Depends(get_db)) -> Job:
-    return Job
+@router.delete('/{job_id}', name='delete_job', status_code=204, response_class=Response)
+def delete_job(job_id: int, db: Session = Depends(get_db)):
+    return crud.delete(db=db, job_id=job_id)

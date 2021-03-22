@@ -1,5 +1,6 @@
-from tests.utils import client
-import pytest
+from tests.db_utils import client
+from tests.utils import get_the_first_id
+
 
 def test_create():
     response = client.post(
@@ -26,33 +27,33 @@ def test_get_list():
 
 
 def test_get_by_id():
-    language_id = 1
+    language_id = get_the_first_id('languages', client)
     response = client.get(f"/languages/{language_id}")
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["id"] == language_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    language_id = 1
-    response = client.put(
-        "/languages/{language_id}",
+    language_id = get_the_first_id('languages', client)
+    response = client.patch(
+        f"/languages/{language_id}",
         json={
-            "level_description": "Advanced"
+            "name": "Another French",
+            "level_description": "Another Intermediate",
+            "written_level": 7,
+            "spoken_level": 4
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["level_description"] == "Advanced"
+    assert data["name"] == "Another French"
+    assert data["level_description"] == "Another Intermediate"
+    assert data["written_level"] == 7
+    assert data["spoken_level"] == 4
 
-@pytest.mark.skip(reason="Not implemented yet.")
+
 def test_delete():
-    language_id = 1
-    response = client.delete("/languages/{language_id}")
-
-    assert response.status_code == 200, response.text
-    data = response.json()
-
-    response = client.get(f"/languages/{language_id}")
-    assert response.status_code == 404, None
+    language_id = get_the_first_id('languages', client)
+    response = client.delete(f"/languages/{language_id}")
+    assert response.status_code == 204, response.text

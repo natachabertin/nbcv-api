@@ -2,31 +2,31 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
+from crud.base import select_item_by_id, list_items, create_item, update_item, \
+    delete_item
 from models.education import Education as mEducation
 from schemas.education import Education as sEducation
 
 
 def select_by_id(db: Session, ed_id: int) -> mEducation:
-    return db.query(mEducation).filter(mEducation.id == ed_id).first()
+    return select_item_by_id(db, mEducation, ed_id)
 
 
 def get_all(
         db: Session, skip: int = 0, limit: int = 100
         ) -> List[mEducation]:
-    return db.query(mEducation).offset(skip).limit(limit).all()
+    return list_items(db, mEducation, skip, limit)
 
 
 def create(db: Session, education: sEducation) -> mEducation:
-    db_ed = mEducation(
-        school=education.school,
-        degree=education.degree,
-        status=education.status
-    )
-    db.add(db_ed)
-    db.commit()
-    db.refresh(db_ed)
-    return db_ed
+    return create_item(db, education, mEducation)
 
 
-def update(db: Session, ed_id: int, education: mEducation) -> mEducation:
-    return select_by_id(db, ed_id)
+def update(
+        db: Session, ed_id: int, education_submit: sEducation
+        ) -> mEducation:
+    return update_item(db, education_submit, mEducation, ed_id)
+
+
+def delete(db: Session, ed_id: int):
+    return delete_item(db, mEducation, ed_id)

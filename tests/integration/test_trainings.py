@@ -1,6 +1,5 @@
-import pytest
-
-from tests.utils import client
+from tests.db_utils import client
+from tests.utils import get_the_first_id
 
 
 def test_create():
@@ -26,33 +25,31 @@ def test_get_list():
 
 
 def test_get_by_id():
-    training_id = 1
+    training_id = get_the_first_id('trainings', client)
     response = client.get(f"/trainings/{training_id}")
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["id"] == training_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    training_id = 1
-    response = client.put(
+    training_id = get_the_first_id('trainings', client)
+    response = client.patch(
         f"/trainings/{training_id}",
         json={
-            "school": "another school"
+            "title": "title",
+            "school": "other school",
+            "end_date": "2021-10-14T15:36:29.896Z"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["school"] == "another school"
+    assert data["title"] == "title"
+    assert data["school"] == "other school"
+    assert data["end_date"] == "2021-10-14T15:36:29.896000"
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_delete():
-    training_id = 1
-
+    training_id = get_the_first_id('trainings', client)
     response = client.delete(f"/trainings/{training_id}")
-    assert response.status_code == 200, response.text
-
-    response = client.get(f"/trainings/{training_id}")
-    assert response.status_code == 404, None
+    assert response.status_code == 204, response.text

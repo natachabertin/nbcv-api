@@ -1,5 +1,5 @@
-from tests.utils import client
-import pytest
+from tests.db_utils import client
+from tests.utils import get_the_first_id
 
 def test_create():
     response = client.post(
@@ -24,33 +24,31 @@ def test_get_list():
 
 
 def test_get_by_id():
-    skill_id = 1
+    skill_id = get_the_first_id('skills', client)
     response = client.get(f"/skills/{skill_id}")
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["id"] == skill_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    skill_id = 1
-    response = client.put(
-        "/skills/{skill_id}",
+    skill_id = get_the_first_id('skills', client)
+    response = client.patch(
+        f"/skills/{skill_id}",
         json={
-            "level": "another@ema.il"
+            "name": "react",
+            "level": 4,
+            "category": "front-end"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["level"] == "another@ema.il"
+    assert data["name"] == "react"
+    assert data["level"] == 4
+    assert data["category"] == "front-end"
 
-@pytest.mark.skip(reason="Not implemented yet.")
+
 def test_delete():
-    skill_id = 1
-    response = client.delete("/skills/{skill_id}")
-
-    assert response.status_code == 200, response.text
-    data = response.json()
-
-    response = client.get(f"/skills/{skill_id}")
-    assert response.status_code == 404, None
+    skill_id = get_the_first_id('skills', client)
+    response = client.delete(f"/skills/{skill_id}")
+    assert response.status_code == 204, response.text

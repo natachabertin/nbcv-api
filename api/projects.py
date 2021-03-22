@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import projects as crud
@@ -12,7 +12,7 @@ from schemas.projects import Project
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_projects', response_model=List[Project])
+@router.get('/', name='all_projects')
 def get_projects(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Project]:
@@ -31,11 +31,11 @@ def get_project(project_id: int, db: Session = Depends(get_db)) -> Project:
     return db_project
 
 
-@router.put('/{project_id}', name='update_project')
-def update_project(project_id: int, db: Session = Depends(get_db)) -> Project:
-    return Project
+@router.patch('/{project_id}', name='update_project')
+def update_project(project_id: int, project: Project, db: Session = Depends(get_db)) -> Project:
+    return crud.update(db=db, project_id=project_id, project_submit=project)
 
 
-@router.delete('/{project_id}', name='delete_project')
+@router.delete('/{project_id}', name='delete_project', status_code=204, response_class=Response)
 def delete_project(project_id: int, db: Session = Depends(get_db)) -> Project:
-    return Project
+    return crud.delete(db=db, project_id=project_id)

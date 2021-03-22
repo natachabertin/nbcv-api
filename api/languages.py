@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import languages as crud
@@ -12,7 +12,7 @@ from schemas.languages import Language
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_languages', response_model=List[Language])
+@router.get('/', name='all_languages')
 def get_languages(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Language]:
@@ -31,11 +31,13 @@ def get_language(language_id: int, db: Session = Depends(get_db)) -> Language:
     return db_language
 
 
-@router.put('/{language_id}', name='update_language')
-def update_language(language_id: int, db: Session = Depends(get_db)) -> Language:
-    return Language
+@router.patch('/{language_id}', name='update_language')
+def update_language(language_id: int, language: Language, db: Session = Depends(get_db)) -> Language:
+    return crud.update(
+        db=db, language_submit=language, language_id=language_id
+    )
 
 
-@router.delete('/{language_id}', name='delete_language')
+@router.delete('/{language_id}', name='delete_language', status_code=204, response_class=Response)
 def delete_language(language_id: int, db: Session = Depends(get_db)) -> Language:
-    return Language
+    return crud.delete(db=db, language_id=language_id)

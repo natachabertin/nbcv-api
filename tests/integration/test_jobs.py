@@ -1,5 +1,6 @@
-from tests.utils import client
-import pytest
+from tests.db_utils import client
+from tests.utils import get_the_first_id
+
 
 def test_create():
     response = client.post(
@@ -24,33 +25,31 @@ def test_get_list():
 
 
 def test_get_by_id():
-    user_id = 1
-    response = client.get(f"/jobs/{user_id}")
+    job_id = get_the_first_id('jobs', client)
+    response = client.get(f"/jobs/{job_id}")
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["id"] == user_id
+    assert data["id"] == job_id
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
 def test_update():
-    user_id = 1
-    response = client.put(
-        "/jobs/{user_id}",
+    job_id = get_the_first_id('jobs', client)
+    response = client.patch(
+        f"/jobs/{job_id}",
         json={
-            "email": "another@ema.il"
+            "title": "Another title",
+            "company": "Another company",
+            "achievements": "Another achievements"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["email"] == "another@ema.il"
+    assert data["title"] == "Another title"
+    assert data["company"] == "Another company"
+    assert data["achievements"] == "Another achievements"
 
-@pytest.mark.skip(reason="Not implemented yet.")
+
 def test_delete():
-    user_id = 1
-    response = client.delete("/jobs/{user_id}")
-
-    assert response.status_code == 200, response.text
-    data = response.json()
-
-    response = client.get(f"/jobs/{user_id}")
-    assert response.status_code == 404, None
+    job_id = get_the_first_id('jobs', client)
+    response = client.delete(f"/jobs/{job_id}")
+    assert response.status_code == 204, response.text
