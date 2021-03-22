@@ -1,7 +1,7 @@
 from typing import List
 
 import fastapi
-from fastapi import Depends
+from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import trainings as crud
@@ -12,7 +12,7 @@ from schemas.trainings import Training
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_trainings', response_model=List[Training])
+@router.get('/', name='all_trainings')
 def get_trainings(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Training]:
@@ -36,6 +36,6 @@ def update_training(training_id: int, training: Training, db: Session = Depends(
     return crud.update(db=db, training_id=training_id, training_submit=training)
 
 
-@router.delete('/{training_id}', name='delete_training')
+@router.delete('/{training_id}', name='delete_training', status_code=204, response_class=Response)
 def delete_training(training_id: int, db: Session = Depends(get_db)) -> Training:
-    return crud.update(db=db, training_id=training_id)
+    return crud.delete(db=db, training_id=training_id)

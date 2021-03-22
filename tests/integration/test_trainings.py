@@ -1,6 +1,5 @@
-import pytest
-
 from tests.db_utils import client
+from tests.utils import get_the_first_id
 
 
 def test_create():
@@ -26,7 +25,7 @@ def test_get_list():
 
 
 def test_get_by_id():
-    training_id = 1
+    training_id = get_the_first_id('trainings', client)
     response = client.get(f"/trainings/{training_id}")
     assert response.status_code == 200, response.text
     data = response.json()
@@ -34,7 +33,7 @@ def test_get_by_id():
 
 
 def test_update():
-    training_id = 1
+    training_id = get_the_first_id('trainings', client)
     response = client.patch(
         f"/trainings/{training_id}",
         json={
@@ -51,9 +50,6 @@ def test_update():
 
 
 def test_delete():
-    training_id = 1
+    training_id = get_the_first_id('trainings', client)
     response = client.delete(f"/trainings/{training_id}")
-    assert response.status_code == 200, response.text
-
-    response = client.get(f"/trainings/{training_id}")
-    assert response.status_code == 404, None
+    assert response.status_code == 204, response.text
