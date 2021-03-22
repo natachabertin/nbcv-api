@@ -2,7 +2,8 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from crud.base import select_item_by_id, list_items, create_item, update_item
+from crud.base import select_item_by_id, list_items, create_item, update_item, \
+    delete_item
 from models.languages import Language as mLanguage
 from schemas.languages import Language as sLanguage
 
@@ -23,6 +24,5 @@ def update(db: Session, language_id: int, language_submit=sLanguage) -> mLanguag
     return update_item(db, language_submit, mLanguage, language_id)
 
 
-def delete(db: Session, language_id: int, language: mLanguage) -> mLanguage:
-    return update_item(db, language, language_id)
-
+def delete(db: Session, language_id: int):
+    return delete_item(db, mLanguage, language_id)
