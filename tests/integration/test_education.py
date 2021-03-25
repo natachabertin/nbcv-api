@@ -6,12 +6,12 @@ from tests.utils import get_the_first_id
 
 def fill_db():
     """Not a test, use fixture to set up."""
-    client.post("/education/", json={"school": "A", "degree": "A", "status": "Completed", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/education/", json={"school": "B", "degree": "B", "status": "Completed", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/education/", json={"school": "C", "degree": "C", "status": "Completed", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/education/", json={"school": "D", "degree": "D", "status": "Completed", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/education/", json={"school": "E", "degree": "E", "status": "Completed", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/education/", json={"school": "F", "degree": "F", "status": "Completed", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
+    client.post("/education/", json={"school": "A", "degree": "A", "status": "Completed", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/education/", json={"school": "B", "degree": "B", "status": "Completed", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/education/", json={"school": "C", "degree": "C", "status": "Completed", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/education/", json={"school": "D", "degree": "D", "status": "Completed", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/education/", json={"school": "E", "degree": "E", "status": "Completed", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/education/", json={"school": "F", "degree": "F", "status": "Completed", "start_date": "2016-03-02", "end_date": "2020-11-30"})
 
 
 def set_up():
@@ -24,8 +24,8 @@ def test_create_all_required_data():
         json={
             "school": "Some school",
             "degree": "Some degree",
-            "start_date": "2016-03-02T18:38:53.654Z",
-            "end_date": "2020-11-30T18:38:53.654Z",
+            "start_date": "2016-03-02",
+            "end_date": "2020-11-30",
             "status": "Completed"
         },
     )
@@ -34,11 +34,10 @@ def test_create_all_required_data():
     assert data["school"] == "Some school"
     assert data["degree"] == "Some degree"
     assert data["status"] == "Completed"
-    assert data["start_date"] == "2016-03-02T18:38:53.654000"
-    assert data["end_date"] == "2020-11-30T18:38:53.654000"
+    assert data["start_date"] == "2016-03-02"
+    assert data["end_date"] == "2020-11-30"
 
 
-@pytest.mark.skip('Make dates mandatory')
 def test_create_missing_required_data():
     response = client.post(
         "/education/",
@@ -50,8 +49,12 @@ def test_create_missing_required_data():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "field required"
-    assert data["detail"]['type'] == "value_error.missing"
+    assert data["detail"][0]['msg'] == "field required"
+    assert data["detail"][0]['type'] == "value_error.missing"
+    assert data["detail"][0]['loc'] == ["body", 'start_date']
+    assert data["detail"][1]['msg'] == "field required"
+    assert data["detail"][1]['type'] == "value_error.missing"
+    assert data["detail"][1]['loc'] == ["body", 'end_date']
 
 
 def test_create_date_is_accepted_and_returned_as_string_date_formatted():
@@ -60,15 +63,15 @@ def test_create_date_is_accepted_and_returned_as_string_date_formatted():
         json={
             "school": "Some school",
             "degree": "Some degree",
-            "start_date": "2016-03-02T18:38:53.654Z",
-            "end_date": "2020-11-30T18:38:53.654Z",
+            "start_date": "2016-03-02",
+            "end_date": "2020-11-30",
             "status": "Completed"
         },
     )
     assert response.status_code == 201, response.text
     data = response.json()
-    assert data["start_date"] == "2016-03-02T18:38:53.654000"
-    assert data["end_date"] == "2020-11-30T18:38:53.654000"
+    assert data["start_date"] == "2016-03-02"
+    assert data["end_date"] == "2020-11-30"
 
 
 def test_get_list_no_filters_returns_entire_list():
@@ -184,8 +187,8 @@ def test_update_all_data():
         json={
             "school": "Another school",
             "degree": "Another degree",
-            "start_date": "2011-03-02T18:38:53.654Z",
-            "end_date": "2011-11-30T18:38:53.654Z",
+            "start_date": "2011-03-02",
+            "end_date": "2011-11-30",
             "status": "Another status"
         },
     )
@@ -194,11 +197,10 @@ def test_update_all_data():
     assert data["degree"] == "Another degree"
     assert data["school"] == "Another school"
     assert data["status"] == "Another status"
-    assert data["start_date"] == "2011-03-02T18:38:53.654000"
-    assert data["end_date"] == "2011-11-30T18:38:53.654000"
+    assert data["start_date"] == "2011-03-02"
+    assert data["end_date"] == "2011-11-30"
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_strings():
     education_id = get_the_first_id('education', client)
     response = client.patch(
@@ -214,18 +216,17 @@ def test_update_strings():
     assert data["degree"] == "Update degree"
     assert data["school"] == "Update school"
     assert data["status"] == "Update status"
-    assert data["start_date"] == "2011-03-02T18:38:53.654000"
-    assert data["end_date"] == "2011-11-30T18:38:53.654000"
+    assert data["start_date"] == "2011-03-02"
+    assert data["end_date"] == "2011-11-30"
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_dates():
     education_id = get_the_first_id('education', client)
     response = client.patch(
         f"/education/{education_id}",
         json={
-            "start_date": "2000-01-01T18:38:53.654Z",
-            "end_date": "2000-01-02T18:38:53.654Z",
+            "start_date": "2000-01-01",
+            "end_date": "2000-01-02",
         },
     )
     assert response.status_code == 200, response.text
@@ -233,8 +234,8 @@ def test_update_dates():
     assert data["degree"] == "Update degree"
     assert data["school"] == "Update school"
     assert data["status"] == "Update status"
-    assert data["start_date"] == "2000-01-01T18:38:53.654000"
-    assert data["end_date"] == "2000-01-02T18:38:53.654000"
+    assert data["start_date"] == "2000-01-01"
+    assert data["end_date"] == "2000-01-02"
 
 
 @pytest.mark.skip('Raise validation error on id not found.')
@@ -246,8 +247,8 @@ def test_update_non_existing_id():
         json={
             "school": "Another school",
             "degree": "Another degree",
-            "start_date": "2011-03-02T18:38:53.654Z",
-            "end_date": "2011-11-30T18:38:53.654Z",
+            "start_date": "2011-03-02",
+            "end_date": "2011-11-30",
             "status": "Another status"
         },
     )
