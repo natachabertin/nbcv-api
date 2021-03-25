@@ -6,12 +6,12 @@ from tests.utils import get_the_first_id
 
 def fill_db():
     """Not a test, use fixture to set up."""
-    client.post("/projects/", json={"name": "A", "description": "A", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/projects/", json={"name": "B", "description": "B", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/projects/", json={"name": "C", "description": "C", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/projects/", json={"name": "D", "description": "D", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/projects/", json={"name": "E", "description": "E", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/projects/", json={"name": "F", "description": "F", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
+    client.post("/projects/", json={"name": "A", "description": "A", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/projects/", json={"name": "B", "description": "B", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/projects/", json={"name": "C", "description": "C", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/projects/", json={"name": "D", "description": "D", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/projects/", json={"name": "E", "description": "E", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/projects/", json={"name": "F", "description": "F", "start_date": "2016-03-02", "end_date": "2020-11-30"})
 
 
 def set_up():
@@ -24,16 +24,16 @@ def test_create_all_required_data():
         json={
             "name": "Some name",
             "description": "Some description",
-            "start_date": "2016-03-02T18:38:53.654Z",
-            "end_date": "2020-11-30T18:38:53.654Z"
+            "start_date": "2016-03-02",
+            "end_date": "2020-11-30"
         },
     )
     assert response.status_code == 201, response.text
     data = response.json()
     assert data["name"] == "Some name"
     assert data["description"] == "Some description"
-    assert data["start_date"] == "2016-03-02T18:38:53.654000"
-    assert data["end_date"] == "2020-11-30T18:38:53.654000"
+    assert data["start_date"] == "2016-03-02"
+    assert data["end_date"] == "2020-11-30"
 
 
 @pytest.mark.skip('Make dates mandatory')
@@ -57,14 +57,14 @@ def test_create_date_is_accepted_and_returned_as_string_date_formatted():
         json={
             "name": "Some name",
             "description": "Some description",
-            "start_date": "2016-03-02T18:38:53.654Z",
-            "end_date": "2020-11-30T18:38:53.654Z"
+            "start_date": "2016-03-02",
+            "end_date": "2020-11-30"
         },
     )
     assert response.status_code == 201, response.text
     data = response.json()
-    assert data["start_date"] == "2016-03-02T18:38:53.654000"
-    assert data["end_date"] == "2020-11-30T18:38:53.654000"
+    assert data["start_date"] == "2016-03-02"
+    assert data["end_date"] == "2020-11-30"
 
 
 def test_get_list_no_filters_returns_entire_list():
@@ -179,16 +179,16 @@ def test_update_all_data():
         json={
             "name": "Another name",
             "description": "Another description",
-            "start_date": "2011-03-02T18:38:53.654Z",
-            "end_date": "2011-11-30T18:38:53.654Z",
+            "start_date": "2011-03-02",
+            "end_date": "2011-11-30",
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["description"] == "Another description"
     assert data["name"] == "Another name"
-    assert data["start_date"] == "2011-03-02T18:38:53.654000"
-    assert data["end_date"] == "2011-11-30T18:38:53.654000"
+    assert data["start_date"] == "2011-03-02"
+    assert data["end_date"] == "2011-11-30"
 
 
 @pytest.mark.skip('Make Update fields optional')
@@ -205,8 +205,8 @@ def test_update_strings():
     data = response.json()
     assert data["description"] == "Update description"
     assert data["name"] == "Update name"
-    assert data["start_date"] == "2011-03-02T18:38:53.654000"
-    assert data["end_date"] == "2011-11-30T18:38:53.654000"
+    assert data["start_date"] == "2011-03-02"
+    assert data["end_date"] == "2011-11-30"
 
 
 @pytest.mark.skip('Make Update fields optional')
@@ -215,16 +215,16 @@ def test_update_dates():
     response = client.patch(
         f"/projects/{project_id}",
         json={
-            "start_date": "2000-01-01T18:38:53.654Z",
-            "end_date": "2000-01-02T18:38:53.654Z",
+            "start_date": "2000-01-01",
+            "end_date": "2000-01-02",
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["description"] == "Update description"
     assert data["name"] == "Update name"
-    assert data["start_date"] == "2000-01-01T18:38:53.654000"
-    assert data["end_date"] == "2000-01-02T18:38:53.654000"
+    assert data["start_date"] == "2000-01-01"
+    assert data["end_date"] == "2000-01-02"
 
 
 @pytest.mark.skip('Raise validation error on id not found.')
@@ -236,8 +236,8 @@ def test_update_non_existing_id():
         json={
             "name": "Another name",
             "description": "Another description",
-            "start_date": "2011-03-02T18:38:53.654Z",
-            "end_date": "2011-11-30T18:38:53.654Z",
+            "start_date": "2011-03-02",
+            "end_date": "2011-11-30",
         },
     )
     assert response.status_code == 422, response.text

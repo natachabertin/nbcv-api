@@ -6,12 +6,12 @@ from tests.utils import get_the_first_id
 
 def fill_db():
     """Not a test, use fixture to set up."""
-    client.post("/jobs/", json={"title": "A", "company": "A", "achievements": "A", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/jobs/", json={"title": "B", "company": "B", "achievements": "B", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/jobs/", json={"title": "C", "company": "C", "achievements": "C", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/jobs/", json={"title": "D", "company": "D", "achievements": "D", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/jobs/", json={"title": "E", "company": "E", "achievements": "E", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
-    client.post("/jobs/", json={"title": "F", "company": "F", "achievements": "F", "start_date": "2016-03-02T18:38:53.654Z", "end_date": "2020-11-30T18:38:53.654Z"})
+    client.post("/jobs/", json={"title": "A", "company": "A", "achievements": "A", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/jobs/", json={"title": "B", "company": "B", "achievements": "B", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/jobs/", json={"title": "C", "company": "C", "achievements": "C", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/jobs/", json={"title": "D", "company": "D", "achievements": "D", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/jobs/", json={"title": "E", "company": "E", "achievements": "E", "start_date": "2016-03-02", "end_date": "2020-11-30"})
+    client.post("/jobs/", json={"title": "F", "company": "F", "achievements": "F", "start_date": "2016-03-02", "end_date": "2020-11-30"})
 
 
 def set_up():
@@ -24,8 +24,8 @@ def test_create_all_required_data():
         json={
             "title": "title",
             "company": "company",
-            "start_date": "2016-03-02T18:38:53.654Z",
-            "end_date": "2020-11-30T18:38:53.654Z",
+            "start_date": "2016-03-02",
+            "end_date": "2020-11-30",
             "achievements": "achievements"
         },
     )
@@ -34,8 +34,8 @@ def test_create_all_required_data():
     assert data["title"] == "title"
     assert data["company"] == "company"
     assert data["achievements"] == "achievements"
-    assert data["start_date"] == "2016-03-02T18:38:53.654000"
-    assert data["end_date"] == "2020-11-30T18:38:53.654000"
+    assert data["start_date"] == "2016-03-02"
+    assert data["end_date"] == "2020-11-30"
 
 
 @pytest.mark.skip('Make dates mandatory')
@@ -60,15 +60,15 @@ def test_create_date_is_accepted_and_returned_as_string_date_formatted():
         json={
             "title": "title",
             "company": "company",
-            "start_date": "2016-03-02T18:38:53.654Z",
-            "end_date": "2020-11-30T18:38:53.654Z",
+            "start_date": "2016-03-02",
+            "end_date": "2020-11-30",
             "achievements": "achievements"
         },
     )
     assert response.status_code == 201, response.text
     data = response.json()
-    assert data["start_date"] == "2016-03-02T18:38:53.654000"
-    assert data["end_date"] == "2020-11-30T18:38:53.654000"
+    assert data["start_date"] == "2016-03-02"
+    assert data["end_date"] == "2020-11-30"
 
 
 def test_get_list_no_filters_returns_entire_list():
@@ -192,8 +192,8 @@ def test_update_all_data():
         json={
             "title": "Another title",
             "company": "Another company",
-            "start_date": "2011-03-02T18:38:53.654Z",
-            "end_date": "2011-11-30T18:38:53.654Z",
+            "start_date": "2011-03-02",
+            "end_date": "2011-11-30",
             "achievements": "Another achievements"
         },
     )
@@ -202,8 +202,8 @@ def test_update_all_data():
     assert data["company"] == "Another company"
     assert data["title"] == "Another title"
     assert data["achievements"] == "Another achievements"
-    assert data["start_date"] == "2011-03-02T18:38:53.654000"
-    assert data["end_date"] == "2011-11-30T18:38:53.654000"
+    assert data["start_date"] == "2011-03-02"
+    assert data["end_date"] == "2011-11-30"
 
 
 @pytest.mark.skip('Make Update fields optional')
@@ -222,8 +222,8 @@ def test_update_strings():
     assert data["company"] == "Update company"
     assert data["title"] == "Update title"
     assert data["achievements"] == "Update achievements"
-    assert data["start_date"] == "2011-03-02T18:38:53.654000"
-    assert data["end_date"] == "2011-11-30T18:38:53.654000"
+    assert data["start_date"] == "2011-03-02"
+    assert data["end_date"] == "2011-11-30"
 
 
 @pytest.mark.skip('Make Update fields optional')
@@ -232,8 +232,8 @@ def test_update_dates():
     response = client.patch(
         f"/jobs/{job_id}",
         json={
-            "start_date": "2000-01-01T18:38:53.654Z",
-            "end_date": "2000-01-02T18:38:53.654Z",
+            "start_date": "2000-01-01",
+            "end_date": "2000-01-02",
         },
     )
     assert response.status_code == 200, response.text
@@ -241,8 +241,8 @@ def test_update_dates():
     assert data["company"] == "Update company"
     assert data["title"] == "Update title"
     assert data["achievements"] == "Update achievements"
-    assert data["start_date"] == "2000-01-01T18:38:53.654000"
-    assert data["end_date"] == "2000-01-02T18:38:53.654000"
+    assert data["start_date"] == "2000-01-01"
+    assert data["end_date"] == "2000-01-02"
 
 
 @pytest.mark.skip('Raise validation error on id not found.')
@@ -254,8 +254,8 @@ def test_update_non_existing_id():
         json={
             "title": "Another title",
             "company": "Another company",
-            "start_date": "2011-03-02T18:38:53.654Z",
-            "end_date": "2011-11-30T18:38:53.654Z",
+            "start_date": "2011-03-02",
+            "end_date": "2011-11-30",
             "achievements": "Another achievements"
         },
     )
@@ -293,10 +293,3 @@ def test_delete_non_existing_id_dont_delete_anything():
     list_after_delete = len(client.get(f"/jobs/").json())
 
     assert list_after_delete == entire_list_len
-
-
-
-
-
-
-
