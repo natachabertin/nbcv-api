@@ -30,7 +30,6 @@ def test_create_all_required_data():
     assert response.status_code == 201, response.text
 
 
-@pytest.mark.skip('Customize create/update return')
 def test_create_returns_all_but_pwd():
     response = client.post(
         "/users/",
@@ -47,7 +46,6 @@ def test_create_returns_all_but_pwd():
     assert "password" not in data
 
 
-@pytest.mark.skip('Make fields mandatory')
 def test_create_missing_required_data():
     response = client.post(
         "/users/",
@@ -58,11 +56,11 @@ def test_create_missing_required_data():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "field required"
-    assert data["detail"]['type'] == "value_error.missing"
+    assert data["detail"][0]['msg'] == "field required"
+    assert data["detail"][0]['type'] == "value_error.missing"
+    assert data["detail"][0]['loc'] == ["body", "email"]
 
 
-@pytest.mark.skip('Validate email and raise error')
 def test_create_email_is_validated_and_raise_error_if_wrong():
     response = client.post(
         "/users/",
@@ -74,8 +72,9 @@ def test_create_email_is_validated_and_raise_error_if_wrong():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "Email is not valid"
-    assert data["detail"]['type'] == "??"  # Check this one
+    assert data["detail"][0]['msg'] == "value is not a valid email address"
+    assert data["detail"][0]['type'] == "value_error.email"
+    assert data["detail"][0]['loc'] == ["body", "email"]
 
 
 @pytest.mark.skip('Validate pwd secure and raise error')
@@ -175,7 +174,6 @@ def test_get_list_filtered_skip_and_limit_zero_returns_empty():
     assert len(response.json()) == 0
 
 
-@pytest.mark.skip('Customize create/update return')
 def test_get_by_id_with_existing_id():
     user_id = get_the_first_id('users', client)
     response = client.get(f"/users/{user_id}")
@@ -200,14 +198,14 @@ def test_get_by_id_with_non_existing_id():
 
 
 @pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
-def test_update_cant_be_done_in_all_data_at_the_same_time():
+def test_update_auth_data_cant_be_done_like_other_entities():
     user_id = get_the_first_id('users', client)
     response = client.patch(
         f"/users/{user_id}",
         json={
             "username": "Another username",
             "email": "another@email.com",
-            "password": "Another status"
+            "password": "pwd_NEW123"
         },
     )
     assert response.status_code == 422, response.text
@@ -217,7 +215,7 @@ def test_update_cant_be_done_in_all_data_at_the_same_time():
 
 
 @pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
-def test_update_username():
+def test_update_username_current_pwd_ok():
     user_id = get_the_first_id('users', client)
     response = client.patch(
         f"/users/{user_id}",
@@ -233,7 +231,55 @@ def test_update_username():
 
 
 @pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
-def test_update_email():
+def test_update_username_current_pwd_missing():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}",
+        json={
+            "username": "anotherUsername",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["username"] == "anotherUsername"
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_update_username_current_pwd_wrong():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}",
+        json={
+            "username": "anotherUsername",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["username"] == "anotherUsername"
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_update_username_new_value_invalid():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}",
+        json={
+            "username": "anotherUsername",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["username"] == "anotherUsername"
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_update_email_current_pwd_ok():
     user_id = get_the_first_id('users', client)
     response = client.patch(
         f"/users/{user_id}",
@@ -249,10 +295,138 @@ def test_update_email():
 
 
 @pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
-def test_update_change_pwd():
+def test_update_email_current_pwd_missing():
     user_id = get_the_first_id('users', client)
     response = client.patch(
         f"/users/{user_id}",
+        json={
+            "email": "another@email.com",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["email"] == "another@email.com"
+    assert "username" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_update_email_current_pwd_wrong():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}",
+        json={
+            "email": "another@email.com",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["email"] == "another@email.com"
+    assert "username" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_update_email_new_value_invalid():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}",
+        json={
+            "email": "another@email.com",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["email"] == "another@email.com"
+    assert "username" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_change_pwd_both_pwd_ok():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}/change_password",
+        json={
+            "password": "securePWD123.",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert "username" in data
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_change_pwd_new_pwd_missing():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}/change_password",
+        json={
+            "password": "securePWD123.",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert "username" in data
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_change_pwd_new_pwd_wrong():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}/change_password",
+        json={
+            "password": "securePWD123.",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert "username" in data
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_change_pwd_old_pwd_missing():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}/change_password",
+        json={
+            "password": "securePWD123.",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert "username" in data
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_change_pwd_old_pwd_wrong():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}/change_password",
+        json={
+            "password": "securePWD123.",
+        },
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert "username" in data
+    assert "email" in data
+    assert "password" not in data
+
+
+@pytest.mark.skip("Auth data can't be updated just like that. Implement update feature when auth implementation.")
+def test_change_pwd_new_insecure_pwd():
+    user_id = get_the_first_id('users', client)
+    response = client.patch(
+        f"/users/{user_id}/change_password",
         json={
             "password": "securePWD123.",
         },
