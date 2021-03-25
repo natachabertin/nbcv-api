@@ -6,13 +6,13 @@ from sqlalchemy.orm import Session
 
 from crud import languages as crud
 from models.database import get_db
-from schemas.languages import Language
+from schemas.languages import Language, LanguageCreate, LanguageUpdate
 
 
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_languages')
+@router.get('/', name='all_languages', response_model=List[Language])
 def get_languages(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Language]:
@@ -20,24 +20,25 @@ def get_languages(
 
 
 @router.post('/', name='add_language', status_code=201, response_model=Language)
-def create_language(language: Language, db: Session = Depends(get_db)) -> Language:
-
+def create_language(language: LanguageCreate, db: Session = Depends(get_db)) -> Language:
     return crud.create(db=db, language=language)
 
 
-@router.get('/{language_id}', name='get_language')
+@router.get('/{language_id}', name='get_language', response_model=Language)
 def get_language(language_id: int, db: Session = Depends(get_db)) -> Language:
     db_language = crud.select_by_id(db, language_id=language_id)
     return db_language
 
 
-@router.patch('/{language_id}', name='update_language')
-def update_language(language_id: int, language: Language, db: Session = Depends(get_db)) -> Language:
+@router.patch('/{language_id}', name='update_language', response_model=Language)
+def update_language(
+        language_id: int, language: LanguageUpdate, db: Session = Depends(get_db)
+        ) -> Language:
     return crud.update(
-        db=db, language_submit=language, language_id=language_id
+        db=db, language_id=language_id, language_submit=language
     )
 
 
 @router.delete('/{language_id}', name='delete_language', status_code=204, response_class=Response)
-def delete_language(language_id: int, db: Session = Depends(get_db)) -> Language:
+def delete_language(language_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, language_id=language_id)

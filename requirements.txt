@@ -3,3 +3,4 @@ uvicorn
 sqlalchemy
 pytest
 requests
+email-validator
