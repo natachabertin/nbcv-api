@@ -36,7 +36,6 @@ def test_create_all_required_data():
     assert data["end_date"] == "2020-11-30"
 
 
-@pytest.mark.skip('Make dates mandatory')
 def test_create_missing_required_data():
     response = client.post(
         "/projects/",
@@ -47,8 +46,12 @@ def test_create_missing_required_data():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "field required"
-    assert data["detail"]['type'] == "value_error.missing"
+    assert data["detail"][0]['msg'] == "field required"
+    assert data["detail"][0]['type'] == "value_error.missing"
+    assert data["detail"][0]['loc'] == ["body", 'start_date']
+    assert data["detail"][1]['msg'] == "field required"
+    assert data["detail"][1]['type'] == "value_error.missing"
+    assert data["detail"][1]['loc'] == ["body", 'end_date']
 
 
 def test_create_date_is_accepted_and_returned_as_string_date_formatted():
@@ -191,7 +194,6 @@ def test_update_all_data():
     assert data["end_date"] == "2011-11-30"
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_strings():
     project_id = get_the_first_id('projects', client)
     response = client.patch(
@@ -209,7 +211,6 @@ def test_update_strings():
     assert data["end_date"] == "2011-11-30"
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_dates():
     project_id = get_the_first_id('projects', client)
     response = client.patch(
@@ -274,51 +275,3 @@ def test_delete_non_existing_id_dont_delete_anything():
     list_after_delete = len(client.get(f"/projects/").json())
 
     assert list_after_delete == entire_list_len
-
-def test_create():
-    response = client.post(
-        "/projects/",
-        json={
-            "name": "Project",
-            "description": "Project example"
-        },
-    )
-    assert response.status_code == 201, response.text
-    data = response.json()
-    assert data["name"] == "Project"
-    assert data["description"] == "Project example"
-
-
-def test_get_list():
-    response = client.get(f"/projects/")
-    assert response.status_code == 200
-    assert type(response.json()) == list
-
-
-def test_get_by_id():
-    project_id = get_the_first_id('projects', client)
-    response = client.get(f"/projects/{project_id}")
-    assert response.status_code == 200, response.text
-    data = response.json()
-    assert data["id"] == project_id
-
-
-def test_update():
-    project_id = get_the_first_id('projects', client)
-    response = client.patch(
-        f"/projects/{project_id}",
-        json={
-            "name": "Another Project",
-            "description": "Another Project example"
-        },
-    )
-    assert response.status_code == 200, response.text
-    data = response.json()
-    assert data["name"] == "Another Project"
-    assert data["description"] == "Another Project example"
-
-
-def test_delete():
-    project_id = get_the_first_id('projects', client)
-    response = client.delete(f"/projects/{project_id}")
-    assert response.status_code == 204, response.text
