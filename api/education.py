@@ -8,6 +8,7 @@ from crud import education as crud
 from models.database import get_db
 from schemas.education import Education, EducationCreate, EducationUpdate
 
+
 router = fastapi.APIRouter()
 
 
