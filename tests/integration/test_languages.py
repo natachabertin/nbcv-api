@@ -36,7 +36,6 @@ def test_create_all_required_data():
     assert data["spoken_level"] == 5
 
 
-@pytest.mark.skip('Make dates mandatory')
 def test_create_missing_required_data():
     response = client.post(
         "/languages/",
@@ -47,11 +46,15 @@ def test_create_missing_required_data():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "field required"
-    assert data["detail"]['type'] == "value_error.missing"
+    assert data["detail"][0]['msg'] == "field required"
+    assert data["detail"][0]['type'] == "value_error.missing"
+    assert data["detail"][0]['loc'] == ["body", 'written_level']
+    assert data["detail"][1]['msg'] == "field required"
+    assert data["detail"][1]['type'] == "value_error.missing"
+    assert data["detail"][1]['loc'] == ["body", 'spoken_level']
 
 
-@pytest.mark.skip('Implement enums on categories')
+@pytest.mark.skip('Implement categ as enums.')
 def test_create_non_existing_category():
     response = client.post(
         "/languages/",
@@ -65,7 +68,7 @@ def test_create_non_existing_category():
     assert data["detail"]['type'] == "??"
 
 
-@pytest.mark.skip('Validate int fields')
+@pytest.mark.skip('Implement integer validations.')
 def test_create_level_is_validated_1_to_10():
     response = client.post(
         "/languages/",
@@ -80,7 +83,7 @@ def test_create_level_is_validated_1_to_10():
     assert data["detail"]['type'] == "??"
 
 
-@pytest.mark.skip('Validate int fields')
+@pytest.mark.skip('Implement integer validations.')
 def test_create_level_is_positive():
     response = client.post(
         "/languages/",
@@ -219,29 +222,25 @@ def test_update_all_data():
     assert data["spoken_level"] == 6
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_strings():
-    language_id = get_the_first_id('language', client)
+    language_id = get_the_first_id('languages', client)
     response = client.patch(
         f"/languages/{language_id}",
         json={
             "name": "Update name",
-            "level_description": "Update level_description",
-            "status": "Update status"
+            "level_description": "Update level_description"
         },
     )
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["level_description"] == "Update level_description"
     assert data["name"] == "Update name"
-    assert data["status"] == "Update status"
     assert data["written_level"] == 3
     assert data["spoken_level"] == 6
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_integers():
-    language_id = get_the_first_id('language', client)
+    language_id = get_the_first_id('languages', client)
     response = client.patch(
         f"/languages/{language_id}",
         json={
@@ -253,7 +252,6 @@ def test_update_integers():
     data = response.json()
     assert data["level_description"] == "Update level_description"
     assert data["name"] == "Update name"
-    assert data["status"] == "Update status"
     assert data["written_level"] == 2
     assert data["spoken_level"] == 8
 
@@ -279,7 +277,7 @@ def test_update_non_existing_id():
 
 
 def test_delete():
-    language_id = get_the_first_id('language', client)
+    language_id = get_the_first_id('languages', client)
     response = client.delete(f"/languages/{language_id}")
     assert response.status_code == 204, response.text
 
