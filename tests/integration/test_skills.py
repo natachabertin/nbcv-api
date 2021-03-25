@@ -18,7 +18,6 @@ def set_up():
     fill_db()
 
 
-@pytest.mark.skip('Make int fields int')
 def test_create_all_required_data():
     response = client.post(
         "/skills/",
@@ -35,7 +34,6 @@ def test_create_all_required_data():
     assert data["level"] == 6
 
 
-@pytest.mark.skip('Make fields mandatory')
 def test_create_missing_required_data():
     response = client.post(
         "/skills/",
@@ -46,11 +44,12 @@ def test_create_missing_required_data():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "field required"
-    assert data["detail"]['type'] == "value_error.missing"
+    assert data["detail"][0]['msg'] == "field required"
+    assert data["detail"][0]['type'] == "value_error.missing"
+    assert data["detail"][0]['loc'] == ["body", 'name']
 
 
-@pytest.mark.skip('Implement enums on categories')
+@pytest.mark.skip('Implement categ as enums.')
 def test_create_non_existing_category():
     response = client.post(
         "/skills/",
@@ -64,7 +63,7 @@ def test_create_non_existing_category():
     assert data["detail"]['type'] == "value_error.missing"
 
 
-@pytest.mark.skip('Validate int fields')
+@pytest.mark.skip('Implement integer validations.')
 def test_create_level_is_validated_1_to_10():
     response = client.post(
         "/skills/",
@@ -78,7 +77,7 @@ def test_create_level_is_validated_1_to_10():
     assert data["detail"]['type'] == "??"
 
 
-@pytest.mark.skip('Validate int fields')
+@pytest.mark.skip('Implement integer validations.')
 def test_create_level_is_positive():
     response = client.post(
         "/skills/",
@@ -195,7 +194,7 @@ def test_get_by_id_with_non_existing_id():
     assert data["detail"]['msg'] == "ID not found"
     assert data["detail"]['type'] == "??"  # Check this one
 
-@pytest.mark.skip('Validate int fields')
+
 def test_update_all_data():
     skill_id = get_the_first_id('skills', client)
     response = client.patch(
@@ -213,7 +212,6 @@ def test_update_all_data():
     assert data["level"] == 9
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_strings():
     skill_id = get_the_first_id('skills', client)
     response = client.patch(
@@ -230,7 +228,6 @@ def test_update_strings():
     assert data["level"] == 9
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_dates():
     skill_id = get_the_first_id('skills', client)
     response = client.patch(
