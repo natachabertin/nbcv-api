@@ -1,6 +1,4 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, Date
 
 from models.database import Base
 
@@ -11,5 +9,5 @@ class Training(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     school = Column(String)
-    end_date = Column(DateTime, default=datetime.utcnow)
+    end_date = Column(Date)
     certificate = Column(String)

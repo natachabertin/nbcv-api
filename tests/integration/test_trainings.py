@@ -36,7 +36,6 @@ def test_create_all_required_data():
     assert data["end_date"] == "2020-11-30"
 
 
-@pytest.mark.skip('Make dates mandatory')
 def test_create_missing_required_data():
     response = client.post(
         "/trainings/",
@@ -48,8 +47,9 @@ def test_create_missing_required_data():
     )
     assert response.status_code == 422, response.text
     data = response.json()
-    assert data["detail"]['msg'] == "field required"
-    assert data["detail"]['type'] == "value_error.missing"
+    assert data["detail"][0]['msg'] == "field required"
+    assert data["detail"][0]['type'] == "value_error.missing"
+    assert data["detail"][0]['loc'] == ["body", 'end_date']
 
 
 def test_create_date_is_accepted_and_returned_as_string_date_formatted():
@@ -191,7 +191,6 @@ def test_update_all_data():
     assert data["end_date"] == "2011-11-30"
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_strings():
     training_id = get_the_first_id('trainings', client)
     response = client.patch(
@@ -210,7 +209,6 @@ def test_update_strings():
     assert data["end_date"] == "2011-11-30"
 
 
-@pytest.mark.skip('Make Update fields optional')
 def test_update_dates():
     training_id = get_the_first_id('trainings', client)
     response = client.patch(
