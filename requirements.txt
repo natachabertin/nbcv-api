@@ -4,4 +4,3 @@ sqlalchemy
 pytest
 requests
 email-validator
-python-multipart
