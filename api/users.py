@@ -1,15 +1,32 @@
+import secrets
 from typing import List
 
 import fastapi
-from fastapi import Depends, Response
+from fastapi import Depends, Response, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.orm import Session
 
 from crud import users as crud
-from models.database import get_db
+from dependencies.database import get_db
 from schemas.users import User, UserCreate, UserUpdate, UserPwdUpdate
 
 
 router = fastapi.APIRouter()
+
+
+security = HTTPBasic()
+
+
+def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = secrets.compare_digest(credentials.username, "stanleyjobson")
+    correct_password = secrets.compare_digest(credentials.password, "swordfish")
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 
 @router.get('/', name='all_users', response_model=List[User])
@@ -17,6 +34,11 @@ def get_users(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[User]:
     return crud.get_all(db, skip=skip, limit=limit)
+
+
+@router.get("/me")
+def read_current_user(username: str = Depends(get_current_username)):
+    return {"username": username}
 
 
 @router.post('/', name='add_user', status_code=201, response_model=User)

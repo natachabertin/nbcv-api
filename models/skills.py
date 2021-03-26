@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from models.database import Base
+from dependencies.database import Base
 
 
 class Skill(Base):
