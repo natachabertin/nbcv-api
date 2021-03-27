@@ -5,7 +5,7 @@ from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import skills as crud
-from models.database import get_db
+from dependencies.database import get_db
 from schemas.skills import Skill, SkillCreate, SkillUpdate
 
 

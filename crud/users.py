@@ -1,10 +1,14 @@
 from typing import List
 
+# from fastapi import HTTPException, status
+# from fastapi.security import HTTPBasicCredentials
 from sqlalchemy.orm import Session
 
+# from crud.auth import validate_credentials
 from crud.base import (
     select_item_by_id, list_items, create_item, update_item, delete_item
 )
+# from errors.security import WrongPasswordException
 from models.users import User as mUser
 from schemas.users import User as User, UserCreate, UserUpdate, UserPwdUpdate
 
@@ -35,3 +39,13 @@ def change_password(
 
 def delete(db: Session, user_id: int):
     return delete_item(db, mUser, user_id)
+
+
+def get_user_by_username(db: Session, username: str):
+    # TODO: refactor to base.crud.get_item_by_data(mItem, key, value)
+    return db.query(mUser).filter(mUser.username == username).first()
+
+
+def get_user_by_email(db: Session, email: str):
+    # TODO: refactor to base.crud.get_item_by_data(mItem, key, value)
+    return db.query(mUser).filter(mUser.email == email).first()
