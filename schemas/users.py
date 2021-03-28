@@ -1,31 +1,17 @@
-from typing import Optional
-
-from pydantic import BaseModel, EmailStr
+from fastapi_users import models
 
 
-class UserBase(BaseModel):
+class User(models.BaseUser):
     pass
 
 
-class UserCreate(UserBase):
-    password: str
-    username: str
-    email: EmailStr
+class UserCreate(models.BaseUserCreate):
+    pass
 
 
-class UserUpdate(UserBase):
-    username: Optional[str]
-    email: Optional[EmailStr]
+class UserUpdate(User, models.BaseUserUpdate):
+    pass
 
 
-class UserPwdUpdate(UserBase):
-    password: str
-
-
-class User(UserBase):
-    id: int
-    username: str
-    email: EmailStr
-
-    class Config:
-        orm_mode = True
+class UserDB(User, models.BaseUserDB):
+    pass
