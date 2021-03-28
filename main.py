@@ -2,10 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 
 from api import (
-    home, education, jobs, trainings, languages, skills, projects, users
+    home, education, jobs, trainings, languages, skills, projects
 )
 from models.database import engine, Base
-
+from security.jwt_auth import fastapi_users, jwt_authentication
+from security.utils import on_after_register
 
 Base.metadata.create_all(bind=engine)
 
@@ -15,7 +16,22 @@ api = FastAPI()
 def configure_routing():
     api.include_router(home.router)
     api.include_router(
-        users.router, prefix="/users", tags=['Users']
+        fastapi_users.get_auth_router(
+            jwt_authentication,
+            # requires_verification=True, # Disable to avoid sending register emails
+        ),
+        prefix="/auth/jwt",
+        tags=["Security"],
+    )
+    api.include_router(
+        fastapi_users.get_register_router(),
+        prefix="/auth",
+        tags=["Security"],
+    )
+    api.include_router(
+        fastapi_users.get_register_router(on_after_register),
+        prefix="/auth",
+        tags=["Security"],
     )
     api.include_router(
         education.router, prefix="/education", tags=['Formal education']
