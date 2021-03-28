@@ -4,3 +4,5 @@ sqlalchemy
 pytest
 requests
 email-validator
+fastapi-users[sqlalchemy]
+databases[sqlite]
