@@ -1,6 +1,6 @@
 import pytest
 
-from tests.test_client import client
+from tests.client import client
 from tests.utils import get_the_first_id
 
 
