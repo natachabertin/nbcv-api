@@ -2,6 +2,7 @@ from typing import List
 
 import fastapi
 from fastapi import Depends, Response
+from security.jwt_auth import is_active_superuser
 from sqlalchemy.orm import Session
 
 from crud import languages as crud
@@ -19,7 +20,8 @@ def get_languages(
     return crud.get_all(db, skip=skip, limit=limit)
 
 
-@router.post('/', name='add_language', status_code=201, response_model=Language)
+@router.post('/', name='add_language', status_code=201, response_model=Language,
+             dependencies=[Depends(is_active_superuser())])
 def create_language(language: LanguageCreate, db: Session = Depends(get_db)) -> Language:
     return crud.create(db=db, language=language)
 
@@ -30,7 +32,8 @@ def get_language(language_id: int, db: Session = Depends(get_db)) -> Language:
     return db_language
 
 
-@router.patch('/{language_id}', name='update_language', response_model=Language)
+@router.patch('/{language_id}', name='update_language', response_model=Language,
+             dependencies=[Depends(is_active_superuser())])
 def update_language(
         language_id: int, language: LanguageUpdate, db: Session = Depends(get_db)
         ) -> Language:
@@ -39,6 +42,7 @@ def update_language(
     )
 
 
-@router.delete('/{language_id}', name='delete_language', status_code=204, response_class=Response)
+@router.delete('/{language_id}', name='delete_language', status_code=204, response_class=Response,
+             dependencies=[Depends(is_active_superuser())])
 def delete_language(language_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, language_id=language_id)
