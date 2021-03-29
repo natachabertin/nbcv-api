@@ -2,6 +2,7 @@ from typing import List
 
 import fastapi
 from fastapi import Depends, Response
+from security.jwt_auth import is_active_superuser
 from sqlalchemy.orm import Session
 
 from crud import jobs as crud
@@ -19,7 +20,8 @@ def get_jobs(
     return crud.get_all(db, skip=skip, limit=limit)
 
 
-@router.post('/', name='add_job', status_code=201, response_model=Job)
+@router.post('/', name='add_job', status_code=201, response_model=Job,
+             dependencies=[Depends(is_active_superuser())])
 def create_job(job: JobCreate, db: Session = Depends(get_db)) -> Job:
 
     return crud.create(db=db, job=job)
@@ -31,11 +33,13 @@ def get_job(job_id: int, db: Session = Depends(get_db)) -> Job:
     return db_job
 
 
-@router.patch('/{job_id}', name='update_job', response_model=Job)
+@router.patch('/{job_id}', name='update_job', response_model=Job,
+             dependencies=[Depends(is_active_superuser())])
 def update_job(job_id: int, job: JobUpdate, db: Session = Depends(get_db)) -> Job:
     return crud.update(db=db, job_id=job_id, job_submit=job)
 
 
-@router.delete('/{job_id}', name='delete_job', status_code=204, response_class=Response)
+@router.delete('/{job_id}', name='delete_job', status_code=204, response_class=Response,
+             dependencies=[Depends(is_active_superuser())])
 def delete_job(job_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, job_id=job_id)
