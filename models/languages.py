@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from dependencies.database import Base
+from models.database import Base
 
 
 class Language(Base):

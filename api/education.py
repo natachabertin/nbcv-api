@@ -5,7 +5,7 @@ from fastapi import Depends, Response
 from sqlalchemy.orm import Session
 
 from crud import education as crud
-from dependencies.database import get_db
+from models.database import get_db
 from schemas.education import Education, EducationCreate, EducationUpdate
 
 

@@ -4,11 +4,10 @@ from fastapi import FastAPI
 from api import (
     home, education, jobs, trainings, languages, skills, projects, users
 )
-from dependencies.database import engine, Base
+from models.database import engine, Base
 
 
 Base.metadata.create_all(bind=engine)
-
 
 api = FastAPI()
 

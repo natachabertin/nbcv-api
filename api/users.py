@@ -2,13 +2,10 @@ from typing import List
 
 import fastapi
 from fastapi import Depends, Response
-from fastapi.security import HTTPBasicCredentials
 from sqlalchemy.orm import Session
 
 from crud import users as crud
-from crud.auth import get_current_user
-from dependencies.auth import security
-from dependencies.database import get_db
+from models.database import get_db
 from schemas.users import User, UserCreate, UserUpdate, UserPwdUpdate
 
 
@@ -20,11 +17,6 @@ def get_users(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[User]:
     return crud.get_all(db, skip=skip, limit=limit)
-
-
-@router.get("/me", name='current_user', response_model=User)
-def read_current_user(db: Session = Depends(get_db), credentials: HTTPBasicCredentials = Depends(security)):
-    return get_current_user(db=db, credentials=credentials)
 
 
 @router.post('/', name='add_user', status_code=201, response_model=User)

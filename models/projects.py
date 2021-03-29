@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date
 
-from dependencies.database import Base
+from models.database import Base
 
 
 class Project(Base):
