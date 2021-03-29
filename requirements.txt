@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-sqlalchemy
+sqlalchemy==1.3.23
 pytest
 requests
 email-validator
