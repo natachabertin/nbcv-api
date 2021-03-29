@@ -1,9 +1,12 @@
+from uuid import UUID
+
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from models.database import Base, get_db
 from main import api
+from schemas.users import UserDB
 from security.jwt_auth import is_active_superuser
 
 
@@ -27,7 +30,12 @@ def override_get_db():
 
 
 def override_active_superuser_validation():
-    return True
+    return UserDB(
+        id=UUID('80c1dfc3-3895-4cb3-9854-b5f2707a66ed'),
+        email='test@user.com.ar',
+        is_active=True, is_superuser=True,
+        is_verified=True,
+        hashed_password='some_hashed_pwd')
 
 api.dependency_overrides[get_db] = override_get_db
 api.dependency_overrides[is_active_superuser] = override_active_superuser_validation
