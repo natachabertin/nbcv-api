@@ -2,6 +2,7 @@ from typing import List
 
 import fastapi
 from fastapi import Depends, Response
+from security.jwt_auth import is_active_superuser
 from sqlalchemy.orm import Session
 
 from crud import education as crud
@@ -12,7 +13,8 @@ from schemas.education import Education, EducationCreate, EducationUpdate
 router = fastapi.APIRouter()
 
 
-@router.get('/', name='all_education', response_model=List[Education])
+@router.get('/', name='all_education', response_model=List[Education]
+)
 def get_educations(
         skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         ) -> List[Education]:
@@ -20,7 +22,8 @@ def get_educations(
 
 
 @router.post('/', name='add_education',
-             status_code=201, response_model=Education)
+             status_code=201, response_model=Education,
+             dependencies=[Depends(is_active_superuser())])
 def create_education(
         education: EducationCreate, db: Session = Depends(get_db)
         ) -> Education:
@@ -35,7 +38,8 @@ def get_education(
     return db_education
 
 
-@router.patch('/{ed_id}', name='update_education', response_model=Education)
+@router.patch('/{ed_id}', name='update_education', response_model=Education,
+             dependencies=[Depends(is_active_superuser())])
 def update_education(
         ed_id: int, education: EducationUpdate, db: Session = Depends(get_db)
         ) -> Education:
@@ -46,7 +50,8 @@ def update_education(
     '/{ed_id}',
     name='delete_education',
     status_code=204,
-    response_class=Response
+    response_class=Response,
+    dependencies=[Depends(is_active_superuser())]
 )
 def delete_education(ed_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, ed_id=ed_id)
