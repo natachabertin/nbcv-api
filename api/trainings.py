@@ -2,6 +2,7 @@ from typing import List
 
 import fastapi
 from fastapi import Depends, Response
+from security.jwt_auth import is_active_superuser
 from sqlalchemy.orm import Session
 
 from crud import trainings as crud
@@ -19,7 +20,8 @@ def get_trainings(
     return crud.get_all(db, skip=skip, limit=limit)
 
 
-@router.post('/', name='add_training', status_code=201, response_model=Training)
+@router.post('/', name='add_training', status_code=201, response_model=Training,
+             dependencies=[Depends(is_active_superuser())])
 def create_training(training: TrainingCreate, db: Session = Depends(get_db)) -> Training:
 
     return crud.create(db=db, training=training)
@@ -31,11 +33,13 @@ def get_training(training_id: int, db: Session = Depends(get_db)) -> Training:
     return db_training
 
 
-@router.patch('/{training_id}', name='update_training', response_model=Training)
+@router.patch('/{training_id}', name='update_training', response_model=Training,
+             dependencies=[Depends(is_active_superuser())])
 def update_training(training_id: int, training: TrainingUpdate, db: Session = Depends(get_db)) -> Training:
     return crud.update(db=db, training_id=training_id, training_submit=training)
 
 
-@router.delete('/{training_id}', name='delete_training', status_code=204, response_class=Response)
+@router.delete('/{training_id}', name='delete_training', status_code=204, response_class=Response,
+             dependencies=[Depends(is_active_superuser())])
 def delete_training(training_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, training_id=training_id)
