@@ -4,6 +4,8 @@ from sqlalchemy.orm import sessionmaker
 
 from models.database import Base, get_db
 from main import api
+from security.jwt_auth import is_active_superuser
+
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
@@ -24,6 +26,10 @@ def override_get_db():
         db.close()
 
 
+def override_active_superuser_validation():
+    return True
+
 api.dependency_overrides[get_db] = override_get_db
+api.dependency_overrides[is_active_superuser] = override_active_superuser_validation
 
 client = TestClient(api)

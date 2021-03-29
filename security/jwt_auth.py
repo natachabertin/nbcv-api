@@ -27,3 +27,6 @@ fastapi_users = FastAPIUsers(
     UserUpdate,
     UserDB,
 )
+
+def is_active_superuser():
+    return fastapi_users.current_user(active=True, superuser=True)
