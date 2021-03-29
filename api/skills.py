@@ -2,6 +2,7 @@ from typing import List
 
 import fastapi
 from fastapi import Depends, Response
+from security.jwt_auth import is_active_superuser
 from sqlalchemy.orm import Session
 
 from crud import skills as crud
@@ -19,7 +20,8 @@ def get_skills(
     return crud.get_all(db, skip=skip, limit=limit)
 
 
-@router.post('/', name='add_skill', status_code=201, response_model=Skill)
+@router.post('/', name='add_skill', status_code=201, response_model=Skill,
+             dependencies=[Depends(is_active_superuser())])
 def create_skill(skill: SkillCreate, db: Session = Depends(get_db)) -> Skill:
     return crud.create(db=db, skill=skill)
 
@@ -30,11 +32,13 @@ def get_skill(skill_id: int, db: Session = Depends(get_db)) -> Skill:
     return db_skill
 
 
-@router.patch('/{skill_id}', name='update_skill', response_model=Skill)
+@router.patch('/{skill_id}', name='update_skill', response_model=Skill,
+             dependencies=[Depends(is_active_superuser())])
 def update_skill(skill_id: int, skill: SkillUpdate, db: Session = Depends(get_db)) -> Skill:
     return crud.update(db=db, skill_id=skill_id, skill_submit=skill)
 
 
-@router.delete('/{skill_id}', name='delete_skill', status_code=204, response_class=Response)
+@router.delete('/{skill_id}', name='delete_skill', status_code=204, response_class=Response,
+             dependencies=[Depends(is_active_superuser())])
 def delete_skill(skill_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, skill_id=skill_id)
