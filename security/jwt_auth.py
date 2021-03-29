@@ -7,7 +7,7 @@ from models.users import user_db
 from schemas.users import User, UserCreate, UserUpdate, UserDB
 
 # TODO: After MVP, refact to read from a gitignored file.
-SECRET = "SOME_GITIGNORED_SECRET_KEY"
+SECRET = "SECRET"
 
 auth_backends: List = []
 

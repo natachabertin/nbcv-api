@@ -10,6 +10,7 @@ from security.utils import on_after_register, on_after_forgot_password, \
     on_after_reset_password, on_after_update, after_verification_request, \
     after_verification
 
+
 Base.metadata.create_all(bind=engine)
 
 api = FastAPI()
@@ -49,7 +50,7 @@ def configure_routing():
         prefix="/users",
         tags=["Users management"],
     )
-    app.include_router(
+    api.include_router(
         fastapi_users.get_verify_router(
             SECRET,
             after_verification_request=after_verification_request,
